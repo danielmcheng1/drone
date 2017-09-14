@@ -228,7 +228,8 @@
 
 
 #image-gallery {
-  width: 100%;
+  width: 80%;
+  float:right;
   position: relative;
   height: 650px;
   background: #000;
