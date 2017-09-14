@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3>Photos</h3>
+
+
+<div class="row onePadding">
+    <div class="col-md-12 col-sm-12">
+        <div class="col-lg-3 col-md-3 col-sm-4">
+            <div class="list-group table-of-contents">
+            {% for mission in missions %}
+                <a class="list-group-item" href="#{{mission}}">{{mission}}</a>
+            {% endfor %}
+            </div>
+                <a class="btn btn-primary btn-md">Fly Now</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    
+</div>
+
+
+{% endblock %}
