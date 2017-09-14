@@ -31,32 +31,23 @@ def init_api_routes(app):
 @authenticate(is_user_valid_func=is_user_valid)
 '''
 def page_about(*args, **kwargs):
-    if current_app:
-        flash('The application was loaded', 'info')
-        flash('The secret key is {0}'.format(current_app.config['SECRET_KEY']), 'info')
+    #if current_app:
+    #    flash('The application was loaded', 'info')
+    #    flash('The secret key is {0}'.format(current_app.config['SECRET_KEY']), 'info')
 
     resp = make_response(render_template('about.html', selected_menu_item="about"))
-    resp.headers[TOKEN_HEADER_NAME] = kwargs[TOKEN_HEADER_NAME]
+    #resp.headers[TOKEN_HEADER_NAME] = kwargs[TOKEN_HEADER_NAME]
     return resp
 
 
-def page_project():
-    return render_template('project.html', selected_menu_item="project")
 
+def page_photos():
+    #my_cookie = request.cookies.get('myCookie')
+    #print('COOKIE FROM THE CLIENT:' + my_cookie)
+    #current_candidates = candidate(serialize=False)
+    missions = ['Powell Parking', 'Carpool', 'Trader Joe''s']
+    return render_template('photos.html', selected_menu_item="photos", missions=missions)
 
-def page_experience():
-    return render_template('experience.html', selected_menu_item="experience")
-
-
-def page_candidate():
-    my_cookie = request.cookies.get('myCookie')
-    print('COOKIE FROM THE CLIENT:' + my_cookie)
-    current_candidates = candidate(serialize=False)
-    return render_template('candidate.html', selected_menu_item="candidate", candidates=current_candidates)
-
-
-def page_add_candidate():
-    return render_template('add_candidate.html', selected_menu_item="candidate")
 
 
 def page_index():
@@ -68,7 +59,7 @@ def page_index():
 def crash_server():
     abort(500)
 
-
+'''
 def initialize_database():
     message_key = "Initialize Database"
     try:
@@ -87,16 +78,13 @@ def fill_database():
         return jsonify(build_message(message_key, err.message))
 
     return jsonify(build_message(message_key, "OK"))
-
+'''
 
 def init_website_routes(app):
     if app:
         app.add_url_rule('/crash', 'crash_server', crash_server, methods=['GET'])
         app.add_url_rule('/about', 'page_about', page_about, methods=['GET'])
-        app.add_url_rule('/project', 'page_project', page_project, methods=['GET'])
-        app.add_url_rule('/candidate', 'page_candidate', page_candidate, methods=['GET'])
-        app.add_url_rule('/candidate/add', 'page_add_candidate', page_add_candidate, methods=['GET'])
-        app.add_url_rule('/experience', 'page_experience', page_experience, methods=['GET'])
+        app.add_url_rule('/photos', 'page_photos', page_photos, methods=['GET'])
         app.add_url_rule('/', 'page_index', page_index, methods=['GET'])
 
 

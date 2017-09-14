@@ -46,32 +46,16 @@
                     {% else %}
                     <li><a href="{{url_for('page_about')}}">About</a></li>
                     {% endif %}
+                    
 
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">Entities <span class="caret"></span></a>
+                           aria-expanded="false">Photos <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-
-                            {% if selected_menu_item == "candidate" %}
-                            <li><a href="#">Candidates</a></li>
-                            {% else %}
-                            <li><a href="{{url_for('page_candidate')}}">Candidates</a></li>
-                            {% endif %}
-
-
-                            {% if selected_menu_item == "project" %}
-                            <li><a href="#">Projects</a></li>
-                            {% else %}
-                            <li><a href="{{url_for('page_project')}}">Projects</a></li>
-                            {% endif %}
-
-                            {% if selected_menu_item == "experience" %}
-                            <li><a href="#">Experience</a></li>
-                            {% else %}
-                            <li><a href="{{url_for('page_experience')}}">Experience</a></li>
-                            {% endif %}
-
+                            <li><a href="{{url_for('page_photos')}}">Powell</a></li>
+                            <li><a href="{{url_for('page_photos')}}">Carpool</a></li>
+                            <li><a href="{{url_for('page_photos')}}">Trader Joe's</a></li>
 
                         </ul>
                     </li>
@@ -92,7 +76,7 @@
 <footer class="footer">
     <div class="container">
         {% block footer %}
-        <p class="text-muted text-center">&copy; Copyright 2015 by <a href="http://packtpub.com/">PacktPub</a>.</p>
+        <p class="text-muted text-center">&copy; Copyright 2017</a>.</p>
         {% endblock %}
     </div>
 </footer>
