@@ -1,0 +1,11 @@
+**/*hidden.conf
+**/*hidden.py
+
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+
+**/venv/
+
+**/testfiles/*
+*.class
