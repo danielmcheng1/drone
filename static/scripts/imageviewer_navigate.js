@@ -44,12 +44,27 @@ $(document).ready(function () {
         if(curImageIdx > total) curImageIdx = 1;
         showImage();
     }
-                
+     
+/*    $(function () {
         var viewer = ImageViewer();
-        $('.iv-large-image').click(function () {
-            viewer.show(this.src, $(this.data));
+        $('.gallery-items').click(function () {
+            var imgSrc = this.src,
+                highResolutionImage = $(this).data('high-res-img');
+     
+            viewer.show(imgSrc, highResolutionImage);
         });
-
+    });*/
+    var viewer = ImageViewer();
+    var playback = $('.gallery-items');
+    var playbackInterval;
+    for (var i = 0; i < playback.length; i++) {
+        var imgSrc = playback[i].src,
+            highResolutionImage = $(playback[i]).data('high-res-img');
+        playbackInterval = setInterval(function() {
+            viewer.show(imgSrc, highResolutionImage);
+            clearInterval(playbackInterval)
+        }, 1000 * i);
+    }
     var interval;
     $(".animateCommand").click(function do_slide() {
         if ($(this).text().trim() == "Animate") {
