@@ -4,7 +4,8 @@ import os
 import datetime
 import cv2 
 import imutils
-#from simplecv import Image
+import logging 
+logger = logging.getLogger(__name__)
 
 def split_into_folders(path):
     folders = []
@@ -27,8 +28,11 @@ def tif_to_jpg(input_img_path, output_img_path):
     cv2.imwrite(output_img_path, cv2.imread(input_img_path), [int(cv2.IMWRITE_JPEG_QUALITY), 60])
 
 def process_image_post_stitching(input_img_path, output_img_path):
-    tif_to_jpg(input_img_path, output_img_path)
-    
+    try:
+        tif_to_jpg(input_img_path, output_img_path)
+    #stiching 
+    except:
+        print("Did not find image in 
     # only rotate 90 degrees for the Powell street parking mission 
     if "1" in split_into_folders(output_img_path):
         rotate(output_img_path, output_img_path, -90)
@@ -38,6 +42,7 @@ def process_mission_post_stitching(mission, ymd, hms):
     base_path = os.path.join(*base_path_str)
     input_img_path = os.path.join(base_path, "stitched.tif")
     output_img_path = os.path.join(base_path, "compressed.jpeg")
+    
     print("Processing from {0} ==>\n  {1}".format(input_img_path, output_img_path))
     process_image_post_stitching(input_img_path, output_img_path)    
     
@@ -76,6 +81,7 @@ def count_cars(input_img_path, output_img_path, xml_file):
     cv2.imwrite(output_img_path, img_gray, [int(cv2.IMWRITE_JPEG_QUALITY), 70])
 
 if __name__ == '__main__':
+    '''
     process_mission_post_stitching("1", "20170913", "130000")
     process_mission_post_stitching("1", "20170913", "131500")
     process_mission_post_stitching("1", "20170914", "191500")
@@ -88,6 +94,7 @@ if __name__ == '__main__':
     process_mission_post_stitching("3", "20170914", "184500")
     process_mission_post_stitching("3", "20170914", "190000")
     process_mission_post_stitching("3", "20170914", "191500")
+    '''
     '''
     resize_raw_directory("C:\\Users\\daniel.cheng\\Downloads\\MasterDocuments\\AllOther\\3_Programming\\danielmcheng1_repos\\drone\\static\\images\\1\\20170913\\130000")
     resize_raw_directory("C:\\Users\\daniel.cheng\\Downloads\\MasterDocuments\\AllOther\\3_Programming\\danielmcheng1_repos\\drone\\static\\images\\1\\20170913\\131500")###diff exposures is bad--and diff quality in images ==> COPIED IN FILE MANUALLY
