@@ -1,33 +1,48 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div class="container">
-<h1>Photos</h1>
-<div class="row onePadding">
-<table>
+<div class="container">
+    <h1>Photos</h1>
     <div class="col-md-12 col-sm-12">
-        <div class="col-lg-2 col-md-3 col-sm-4">
-            <div class="list-group table-of-contents">
-            {% for mission in missions %}
-                <a class="list-group-item" href="#{{mission}}">{{mission}}</a>
-            {% endfor %}
+        <div class="dropdown">
+            <div class="btn-toolbar" style="display=inline">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Select Mission<span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                    {% for mission in missions %}
+                        <li><a href="#{{mission}}">{{mission}}</a></li>
+                    {% endfor %}
+                </ul>
+                
+                <a class="btn btn-primary btn-md">Fly Now</a>   
             </div>
-                <a class="btn btn-primary btn-md">Fly Now</a>
+        </div>    
+    </div>
+<table>
+    
+        <div class="col-md-12 col-sm-12">
+            <div class="col-lg-2 col-md-3 col-sm-4">
+                <div class="list-group table-of-contents">
+                {% for mission in missions %}
+                    <a class="list-group-item" href="#{{mission}}">{{mission}}</a>
+                {% endfor %}
+                </div>
+                    <a class="btn btn-primary btn-md">Fly Now</a>
+            </div>
+                
+            <div id="image-gallery">
+                <div class="image-container"></div>
+                <img src="{{url_for('static', filename='images/left.svg')}}" class="prev"/>
+                <img src="{{url_for('static', filename='images/right.svg')}}" class="next"/>
+                <div class="footer-info">
+                    <span class="current"></span>/<span class="total"></span>
+                </div>
+            </div>   
         </div>
-            
-        <div id="image-gallery">
-            <div class="image-container"></div>
-            <img src="{{url_for('static', filename='images/left.svg')}}" class="prev"/>
-            <img src="{{url_for('static', filename='images/right.svg')}}" class="next"/>
-            <div class="footer-info">
-                <span class="current"></span>/<span class="total"></span>
-            </div>
-        </div>   
+    </div>
+    <div class="row">
     </div>
 </div>
-<div class="row">
-</div>
-    </div>
 
 {% endblock %}
 
