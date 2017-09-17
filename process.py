@@ -32,11 +32,16 @@ def process_image_post_stitching(input_img_path, output_img_path):
         tif_to_jpg(input_img_path, output_img_path)
     #stiching 
     except:
-        print("Did not find image in 
+        logger.warning("Did not find stitched tif in {0}. Stitching may have failed. 
+        
     # only rotate 90 degrees for the Powell street parking mission 
     if "1" in split_into_folders(output_img_path):
         rotate(output_img_path, output_img_path, -90)
-
+    elif "2" in split_into_folders(output_img_path) or "3" in split_into_folders(output_img_path):
+    
+    else:
+        logger.war
+    
 def process_mission_post_stitching(mission, ymd, hms):
     base_path_str = "static,images,{0},{1},{2}".format(mission, ymd, hms).split(",")
     base_path = os.path.join(*base_path_str)
