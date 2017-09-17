@@ -44,6 +44,12 @@ $(document).ready(function () {
         if(curImageIdx > total) curImageIdx = 1;
         showImage();
     }
+                
+        var viewer = ImageViewer();
+        $('.iv-large-image').click(function () {
+            viewer.show(this.src, $(this.data));
+        });
+
     var interval;
     $(".animateCommand").click(function do_slide() {
         if ($(this).text().trim() == "Animate") {

@@ -5,8 +5,26 @@ import datetime
 import cv2 
 import imutils
 import logging 
+import imageio
 logger = logging.getLogger(__name__)
 
+
+def create_gif():
+    dir_path = "C:\\Users\\daniel.cheng\\Downloads\\MasterDocuments\\AllOther\\3_Programming\\danielmcheng1_repos\\drone\\static\\images\\backup\\20170914\\1\\20170914\\190000"
+    images_for_gif = []
+    for file_name in os.listdir(dir_path):
+        if os.path.isdir(file_name):
+            continue 
+        elif file_name.endswith(('jpeg', 'JPG')):
+            file_path = os.path.join(dir_path, file_name)
+            images_for_gif.append(imageio.imread(file_path))
+        else:
+            continue
+            
+    output_file = 'Gif-%s.gif' % datetime.datetime.now().strftime('%Y-%M-%d-%H-%M-%S')
+    imageio.mimsave(output_file, images_for_gif, duration=1)
+
+#returns listing of each directory reverse sorted
 def split_into_folders(path):
     folders = []
     while 1:
@@ -20,6 +38,14 @@ def split_into_folders(path):
             break
     return folders 
     
+def pull_mission_name(path):
+    folders = split_into_folders(path)
+    #filename --> timestamp --> date --> mission 
+    if folders.length > 3:
+        return folders[3]
+    else:
+        return ""
+    
 def rotate(input_img_path, output_img_path, degrees):
     rotated_img = imutils.rotate_bound(cv2.imread(input_img_path), degrees)
     cv2.imwrite(output_img_path, rotated_img)
@@ -32,15 +58,15 @@ def process_image_post_stitching(input_img_path, output_img_path):
         tif_to_jpg(input_img_path, output_img_path)
     #stiching 
     except:
-        logger.warning("Did not find stitched tif in {0}. Stitching may have failed. 
+        logger.warning("Did not find stitched tif in {0}. Stitching may have failed.")
         
     # only rotate 90 degrees for the Powell street parking mission 
-    if "1" in split_into_folders(output_img_path):
+    if "1" in pull_mission_name(output_img_path):
         rotate(output_img_path, output_img_path, -90)
-    elif "2" in split_into_folders(output_img_path) or "3" in split_into_folders(output_img_path):
-    
+    elif "2" in pull_mission_name(output_img_path) or "3" in pull_mission_name(output_img_path):
+        rotate(output_img_path, output_img_path, 0)
     else:
-        logger.war
+        logger.warning("Found new mission: " + pull_mission_name(output_img_path))
     
 def process_mission_post_stitching(mission, ymd, hms):
     base_path_str = "static,images,{0},{1},{2}".format(mission, ymd, hms).split(",")
