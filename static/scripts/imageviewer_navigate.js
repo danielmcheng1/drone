@@ -1,5 +1,8 @@
 $(document).ready(function () {
     var images = [{
+        small : '../static/images/gittest.gif',
+        big : '../static/images/gittest.gif'
+    },{
         small : '../static/images/half.jpeg',
         big : '../static/images/half.jpeg'
     },{
@@ -53,7 +56,7 @@ $(document).ready(function () {
      
             viewer.show(imgSrc, highResolutionImage);
         });
-    });*/
+    });
     var viewer = ImageViewer();
     var playback = $('.gallery-items');
     var playbackInterval;
@@ -64,7 +67,7 @@ $(document).ready(function () {
             viewer.show(imgSrc, highResolutionImage);
             clearInterval(playbackInterval)
         }, 1000 * i);
-    }
+    }*/
     var interval;
     $(".animateCommand").click(function do_slide() {
         if ($(this).text().trim() == "Animate") {
