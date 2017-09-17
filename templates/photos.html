@@ -3,14 +3,14 @@
 {% block content %}
 <div class="container">
     <div class="inline-headers">
-        <h1>Photos</h1>
+        <h1 id=photosHeader>Powell Street Parking Photos</h1>
             <div class="dropdown">
                 <div class="btn-toolbar" style="margin-bottom:10px">
                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                         Select Mission<span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
                         {% for mission in missions %}
-                            <li><a href="#{{mission}}">{{mission}}</a></li>
+                            <li><a href="#{{mission}}" id=selectMission{{mission['id']}}>{{mission['name']}}</a></li>
                         {% endfor %}
                     </ul>
                     

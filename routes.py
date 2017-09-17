@@ -45,7 +45,7 @@ def page_photos():
     #my_cookie = request.cookies.get('myCookie')
     #print('COOKIE FROM THE CLIENT:' + my_cookie)
     #current_candidates = candidate(serialize=False)
-    missions = ['Powell', 'Carpool', '  ']
+    missions = [{'id': '1', 'name': 'Powell Street Parking'}, {'id': '2', 'name': 'Emeryville Carpool'}, {'id': '3','name': '2200 Parking'}]
     return render_template('photos.html', selected_menu_item="photos", missions=missions)
 
 
