@@ -39,4 +39,21 @@ $(document).ready(function () {
  
     //initially show image
     showImage();
+    function moveRight() {
+        curImageIdx++;
+        if(curImageIdx > total) curImageIdx = 1;
+        showImage();
+    }
+    $(".footer-info").click(function do_slide() {
+        var interval;
+        alert($(this) + " text: " + $(this).text());
+        if ($(this).text() == "Animate") {
+            $(this).text("Stop Animation");
+            interval = setInterval(function() {
+                moveRight();
+            }, 1000);
+        } else {
+            clearInterval(interval);
+        }
+    });
 });

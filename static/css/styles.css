@@ -50,9 +50,13 @@
 
 .leftSpan {
     float:left;
-    font-style:italic
 }
 .rightSpan {
     float:right;
+}
+.analyzeCommand {
+    font-style:italic
+}
+.animateCommand {
     font-style:italic
 }
