@@ -44,16 +44,16 @@ $(document).ready(function () {
         if(curImageIdx > total) curImageIdx = 1;
         showImage();
     }
-    $(".footer-info").click(function do_slide() {
-        var interval;
-        alert($(this) + " text: " + $(this).text());
-        if ($(this).text() == "Animate") {
+    var interval;
+    $(".animateCommand").click(function do_slide() {
+        if ($(this).text().trim() == "Animate") {
             $(this).text("Stop Animation");
             interval = setInterval(function() {
                 moveRight();
             }, 1000);
         } else {
             clearInterval(interval);
+            $(this).text("Animate");
         }
     });
 });
