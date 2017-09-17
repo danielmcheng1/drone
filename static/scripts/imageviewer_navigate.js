@@ -3,8 +3,11 @@ $(document).ready(function () {
         small : '../static/images/half.jpeg',
         big : '../static/images/half.jpeg'
     },{
-        small : '../static/images/full.jpeg',
-        big : '../static/images/full.jpeg'
+        small : '../static/images/full_jagged.jpeg',
+        big : '../static/images/full_jagged.jpeg'
+    },{
+        small : '../static/images/single.jpeg',
+        big : '../static/images/single.jpeg'
     }];
  
     var curImageIdx = 1,
