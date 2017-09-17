@@ -11,3 +11,4 @@
 *.class
 
 references/*
+static/images/backup/*
