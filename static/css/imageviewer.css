@@ -235,11 +235,14 @@
   background: #000;
 }
 #image-gallery .image-container {
-  position: absolute;
+    position: relative;
+    float: left;
+    width:100%;
+  /*position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 50px;
+  bottom: 50px;*/
 }
 #image-gallery .prev,
 #image-gallery .next {
