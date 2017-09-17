@@ -257,12 +257,12 @@
 }
 #image-gallery .footer-info {
   position: absolute;
-  height: 50px;
+  height: 30px;
   width: 100%;
   left: 0;
   bottom: 0;
-  line-height: 50px;
-  font-size: 24px;
+  line-height: 30px;
+  font-size: 16px;
   text-align: center;
   color: white;
   border-top: 1px solid #FFF;
