@@ -47,3 +47,12 @@
     border: 1px solid #DD4814;
     border-radius: 1.0em !important;
 }
+
+.leftSpan {
+    float:left;
+    font-style:italic
+}
+.rightSpan {
+    float:right;
+    font-style:italic
+}
