@@ -24,9 +24,9 @@
     {% for ymd in executions_by_ymd}
     <section>
         <div class="container">
-            <h4 style="display:inline-block">execution["ymd"]</h4><!--&nbsp;&nbsp;<button type="button" class="btn btn-primary">Animate&nbsp;&nbsp;</button-->
-            <div id="image-gallery">
-                <div class="image-container" id=></div>
+            <h4 style="display:inline-block">{{ymd}}</h4>&nbsp;&nbsp;<p class="text-primary" id="timestampFor{{ymd}}"></p>
+            <div id="image-gallery-{{ymd}}">
+                <div class="image-container"></div>
                     <img src="{{url_for('static', filename='images/left.svg')}}" class="prev"/>
                     <img src="{{url_for('static', filename='images/right.svg')}}" class="next"/>
                     <div class="footer-info">
