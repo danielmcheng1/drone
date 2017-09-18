@@ -7,13 +7,13 @@ from flask import abort
 from flask import request
 
 #from decorators import authenticate
-
+import json 
 import process 
 
 TOKEN_HEADER_NAME = "MY_AUTH_TOKEN"
 def init_api_routes(app):
     if app:
-        app.add_url_rule('photos/<string:id>', 'photos_by_id', photos_by_id,, methods=['GET']) 
+        app.add_url_rule('photos/<string:id>', 'photos_by_id', photos_by_id, methods=['GET']) 
         '''app.add_url_rule('/api/candidates/<string:id>', 'candidate_by_id', candidate_by_id, methods=['GET'])
         app.add_url_rule('/api/candidates', 'candidate', candidate, methods=['GET'])
         app.add_url_rule('/api/candidates', 'add_candidate', add_candidate, methods=['POST'])
@@ -50,30 +50,26 @@ def page_photos():
     return render_template('photos.html', selected_menu_item="photos", missions=missions)
 
 def photos_by_id(id):
-    rv = process.process_all_new_executions(id)
-    if rv:
-        #maybe only the new ones? should always be the latest one...
-        processed_executions = filter_by_id(get_all_mission_executions(process.PROCESSED_PATH, False), id)
-        mission_ids = ['1', '2', '3']
-        mission_id_to_label = {'1': 'Powell Street Parking', '2': 'Emeryville Carpool', '3': '2200 Parking'}
-        #TAKE OUT JSON DUMPS 
-        executions_serialized = [execution.serialize() for execution in processed_executions]
+    process.process_all_new_executions(id)
+    processed_executions = process.filter_by_id(process.get_all_mission_executions(process.PROCESSED_PATH, False), id)
+    
+    mission_ids = ['1', '2', '3']
+    mission_id_to_label = {'1': 'Powell Street Parking', '2': 'Emeryville Carpool', '3': '2200 Parking'}
+    executions_serialized = [execution.serialize() for execution in processed_executions]
+    
+    #dictionary mapping from ymd to an array of all images on that day, sorted by reverse timestamp
+    executions_by_ymd = {} 
+    for execution_serialized in executions_serialized:
+        ymd = execution_serialized["ymd"]
+        if ymd not in executions_by_ymd:
+            executions_by_ymd[ymd] = []
+        executions_by_date.append(execution_serialized)
         
-        #dictionary mapping from ymd to an array of all images on that day, sorted by reverse timestamp
-        executions_by_ymd = {} 
-        for execution_serialized in executions_serialized:
-            ymd = execution_serialized["ymd"]
-            if ymd not in executions_by_ymd:
-                executions_by_ymd[ymd] = []
-            executions_by_date.append(execution_serialized)
-            
-        #make sure these are sorted in reverse time order for each day 
-        for ymd in executions_by_ymd:
-            executions_by_ymd[ymd].sort(key = lambda x: x["hms"], reverse = true)
-            
-        return render_template('photos.html', selected_menu_item="photos", executions_by_ymd=executions_by_ymd, id=id, mission_id_to_label=mission_id_to_label, mission_ids=mission_ids)
-    else:
-        return "NO_NEW_DATA"
+    #make sure these are sorted in reverse time order for each day 
+    for ymd in executions_by_ymd:
+        executions_by_ymd[ymd].sort(key = lambda x: x["hms"], reverse = true)
+        
+    return render_template('photos.html', selected_menu_item="photos", executions_by_ymd=json.dumps(executions_by_ymd), id=id, mission_id_to_label=json.dumps(mission_id_to_label), mission_ids=json.dumps(mission_ids))
 
 
 def page_index():
