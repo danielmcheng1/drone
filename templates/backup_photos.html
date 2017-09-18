@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="inline-headers">
+        <h1 id=photosHeader>Powell Street Parking Photos</h1>
+            <div class="dropdown">
+                <div class="btn-toolbar" style="margin-bottom:10px">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                        Select Mission<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        {% for mission in missions %}
+                            <li><a href="#{{mission}}" id=selectMission{{mission['id']}}>{{mission['name']}}</a></li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <a class="btn btn-success btn-md">Fly Now</a>   
+                </div>
+            </div>    
+    </div>
+    
+    <!--div class="col-md-12 col-sm-12">
+    </div-->
+    <section>
+                       
+        <div class="container">
+            <h4 style="display:inline-block">Sep 17</h4><!--&nbsp;&nbsp;<button type="button" class="btn btn-primary">Animate&nbsp;&nbsp;</button-->
+            
+<!--div id="image-gallery-1" class="cf">
+    <img src="{{url_for('static', filename='images/single.jpeg')}}" data-high-res-src="{{url_for('static', filename='images/single.jpeg')}}" alt="" class="gallery-items">
+    <img src="{{url_for('static', filename='images/single.jpeg')}}" data-high-res-src="{{url_for('static', filename='images/half.jpeg')}}" alt="" class="gallery-items">
+</div-->
+            <div id="image-gallery">
+                <div class="image-container" id=></div>
+                    <img src="{{url_for('static', filename='images/left.svg')}}" class="prev"/>
+                    <img src="{{url_for('static', filename='images/right.svg')}}" class="next"/>
+                    <div class="footer-info">
+                        <span class="leftSpan analyzeCommand">&nbsp;&nbsp;Analyze</span>
+                        <span class="current"></span>/<span class="total"></span>
+                        <span class="rightSpan animateCommand">Animate&nbsp;&nbsp;</span>
+                    </div>
+                </div>
+            </div>   
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            <h4>Sep 15</h4>]
+        </div>
+    </section>
+    
+    
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script lang="text/javascript" src="{{url_for('static', filename='scripts/imageviewer.min.js')}}"></script>
+<script lang="text/javascript" src="{{url_for('static', filename='scripts/imageviewer_navigate.js')}}"></script>
+{% endblock %}
