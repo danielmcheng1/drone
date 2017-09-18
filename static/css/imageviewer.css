@@ -227,35 +227,35 @@
 
 
 
-#image-gallery {
+.image-gallery {
   width: 100%;
   float:left;
   position: relative;
   height: 400px;
   background: #000;
 }
-#image-gallery .image-container {
+.image-gallery .image-container {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 50px;
 }
-#image-gallery .prev,
-#image-gallery .next {
+.image-gallery .prev,
+.image-gallery .next {
   position: absolute;
   height: 32px;
   margin-top: -66px;
   top: 50%;
 }
-#image-gallery .prev {
+.image-gallery .prev {
   left: 20px;
 }
-#image-gallery .next {
+.image-gallery .next {
   right: 20px;
   cursor: pointer;
 }
-#image-gallery .footer-info {
+.image-gallery .footer-info {
   position: absolute;
   height: 30px;
   width: 100%;

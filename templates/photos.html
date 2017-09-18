@@ -3,14 +3,14 @@
 {% block content %}
 <div class="container">
     <div class="inline-headers">
-        <h1 id=photosHeader>Powell Street Parking Photos</h1>
+        <h1 id=photosHeader>{{mission_id_to_label[id]}} Photos</h1>
             <div class="dropdown">
                 <div class="btn-toolbar" style="margin-bottom:10px">
                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                         Select Mission<span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
-                        {% for mission in missions %}
-                            <li><a href="#{{mission}}" id=selectMission{{mission['id']}}>{{mission['name']}}</a></li>
+                        {% for id in mission_ids %}
+                            <li><a href="#{{mission}}">{{mission_id_to_label[id]}}</a></li>
                         {% endfor %}
                     </ul>
                     
@@ -21,15 +21,10 @@
     
     <!--div class="col-md-12 col-sm-12">
     </div-->
+    {% for ymd in executions_by_ymd}
     <section>
-                       
         <div class="container">
-            <h4 style="display:inline-block">Sep 17</h4><!--&nbsp;&nbsp;<button type="button" class="btn btn-primary">Animate&nbsp;&nbsp;</button-->
-            
-<!--div id="image-gallery-1" class="cf">
-    <img src="{{url_for('static', filename='images/single.jpeg')}}" data-high-res-src="{{url_for('static', filename='images/single.jpeg')}}" alt="" class="gallery-items">
-    <img src="{{url_for('static', filename='images/single.jpeg')}}" data-high-res-src="{{url_for('static', filename='images/half.jpeg')}}" alt="" class="gallery-items">
-</div-->
+            <h4 style="display:inline-block">execution["ymd"]</h4><!--&nbsp;&nbsp;<button type="button" class="btn btn-primary">Animate&nbsp;&nbsp;</button-->
             <div id="image-gallery">
                 <div class="image-container" id=></div>
                     <img src="{{url_for('static', filename='images/left.svg')}}" class="prev"/>
@@ -43,19 +38,17 @@
             </div>   
         </div>
     </section>
-    <section>
-        <div class="container">
-            <h4>Sep 15</h4>]
-        </div>
-    </section>
-    
-    
+    {% endfor %}    
 </div>
 
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
+<script type="text/javascript">
+    var executions_by_ymd = {{executions_by_ymd}};
+</script>
+        
 <script lang="text/javascript" src="{{url_for('static', filename='scripts/imageviewer.min.js')}}"></script>
 <script lang="text/javascript" src="{{url_for('static', filename='scripts/imageviewer_navigate.js')}}"></script>
 {% endblock %}
