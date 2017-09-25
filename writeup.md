@@ -1,6 +1,6 @@
 # Drone Project Thesis
 _Author: Daniel Cheng_<br>
-_Date: 9/2 to 9/17_
+_Date: 9/2/17 to 9/17/17_
 
 [//]: # (better name based off of thesis?)
 
@@ -30,8 +30,9 @@ Features Supported
 * Automatic caching of photos
 * Good focus / image quality
 
-missing Features
+Missing Features
 * __Mission  Automation__: 
+
 ### Hobbyist Apps for Recreation
 These apps target single user consumer flying drones primarily for personal recreation. 
 
@@ -78,15 +79,37 @@ This is the most advanced hobbyist app on the market. Users can precisely contro
 
 The priciest of all these  apps ($29.95), Autopilot is ideally suited for those who need advanced automated flight control beyond what Litchi and DJI Ultimate Flight can offer. The learning curve is steeper due to the increased complexity offered for mission planning.
 
-[//]: # (include screenshot)
 
 ### Enterprise Apps for Surveyance
 These apps diverge from the native DJI UI--while they do provide flight automation, the app itself is a tool, a means towards an end. 
 That end is photogrammetry--generating a high-resolution or even 3D model via scores and hundreds of drone pictures. Hence these apps tend to target professional or enterprise customers who are willing to pay more for the photo editing tool on the backend. And who need an app that will fly hundreds of missions over a large area.
- enterprise is their target.
+<br>
+Again, in increasing order of complexity and cost:
 1. Flying Precision
 2. Pix4D
 3. Drone Deploy
+
+__Flying Precision__<br>
+Deployed by Precision Hawk, this free app offers a very simple front-end interface. Simply touch and drag to mark the survey area on the map, the app will automatically generate a waypoint mission to fly. There are no additional capabilities for customizing camera focus or gimbal rotation--the app simply flies the drone over the desired area and automatically captures however images are needed for generating a detailed high-resolution image of the area.
+
+__Pix4D__<br>
+Another free app, Pix4D offers more customization than Flying Precision. For example, several different missions can be flown, including grid, criss cross, orbit, and panorama.
+
+[//]: # (screenshot)
+
+Users can also customize the angle of the gimbal and the rate of capture. Missions can be grouped into higher level "projects", and all photos are locally cached to corresponding subfolders within the phone's internal storage. 
+
+Everything in the app is geared towards the post-processing "photogrammetry" stage. Upon photo download, all images can be automatically uploaded to Pix4D cloud servers, which are then stitched together to construct a 3D model of the surveyed landscape.
+
+In the words of one of the supported reps that I contacted regarding this app:
+> Pix4Dcapture is a great flight planning app we provide free [but] you are free to use other applications if they better suit your needs. It is our Pix4Dmapper software that is the premier solution for photogrammetry, and as long as you are able to capture your images with the correct overlap and quality, you can process with Pix4Dmapper. 
+
+__Drone Deploy__<br>
+By far the most complex and costly of all three (coming in at $99 _per month(!)_), Drone Deploy clearly targets enterprise customers. Upon first opening the app, you're taken to a farming demo mission showcasing the app's ability to survey and model a large swatch of farmland in the Midwest.
+
+Other touted features include:
+* Analysis of # of batteries needed for flight
+* Automatic continuation of a mission should it be aborted midway through
 
 ### Logistics 
 _Cost_
