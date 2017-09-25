@@ -143,7 +143,7 @@ Photo Transfer:
 ### Initial Exploration of SDK
 Before jumping into coding all of these functions, I first determined whether the existing mobile SDK could indeed achieve each of the minimum criteria listed above. Otherwise, an alternative to the SDK would have to be used should any of the above features seem infeasible during this exploration stage.
 
-Feature | SDK Class | SDK Method
+Feature | DJI SDK Class | DJI SDK Method
 ------- | --------- | ----------
 Mission Automation | MissionBuilder | addWaypoint, addAction, loadMission, startMission 
 Photo Caching | MediaManager | onNewFile, fetchFileData
@@ -158,6 +158,10 @@ Photo Transfer| JSch
 
 ## Android App Development
 ### Initial Build (Alpha)
+Android was chosen as the development platform for two reasons:
+1. __Existing hardware__: I had an Android phone readily available for installing and debugging 
+2. __Flexibility__: Android generally offers more developer control (e.g. I was more likely to be able to control and access where photos were stored locally)
+
 I had two options for learning Android app development:
 1. Ground-up Approach: Watch tutorial videos, learn Android basics, test out a sample app
 2. Copy and Modify: 
@@ -168,7 +172,7 @@ __Day 1__
 <br>[x] Compile and run tutorials 
 <br>[x] Set up live video stream 
 <br>[x] Create button to take a photo during drone flight
-<br>[x] Troubleshoot Android permissions on Marshmallow 
+<br>[x] Troubleshoot Android permissions (requested at runtime instead of on installation for >= Marshmallow)
 
 __Day 2__:  
 <br>[x] Programmatically set autofocus 
@@ -193,10 +197,32 @@ __Day 5__:
 <br>[x] Test complete execution of mission with automatic resize and upload to server 
  
 
-
 ### App Troubleshooting / Hardest Problems
-* Marshmallow permissions 
-* Download bandwidth 
+Below are a sampling of the more complex problems I ran into during app development 
+* Download bandwidth and multithreading 
+During my first code iteration, I automatically triggered file download to local phone storage:
+```java 
+camera.setMediaFileCallback(new MediaFile.Callback() {
+    @Override
+    public void onNewFile(MediaFile mediaFile) {
+        mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExtension, new DownloadListener<String>() {
+            @Override
+            public void onStart() {
+            }
+            public void onSuccess(String s) {
+            }
+            public void onFailure(String s) {
+            }
+            
+        }
+    }
+}
+```
+
+Thus taking a newphotos would trigger the onNewFile callback, which would then start fetching the file data to download theimage to local storage. This feature appeared to work perfectly when testing in the DJI simulator (a virtual flight software allowing execution of missions on the computer) 
+
+However, upon running the exact same missions outside, only the first 5 or 6 images would download. The rest would raise a timeout error.
+stress testing 
 * Scheduling waypoint missions 
 * SCP transfer
    * how to transfer quickly 
@@ -229,5 +255,12 @@ __Android App__<br>
 * Waypoint mission flying
 * Live video feed
 
+Final Takeaways
+o	BREAKDOWN PROBLEM—e.g. API make it as explicit as possible and small as possible so that you make the MVP
+?	Make sure you scope as much of the problem so you know if feasible before investing more time
+o	You always try to find a prebuilt solution—like all these apps—instead of building your own. Much faster and smarter and safer
+Agile Development:  Planning a project of unknown complexity, adjusting as unexpected obstacles come  up
+Minimum Viable Product: Quickly picking up and learning whatever techniques are necessary for MVP 
+Production Systems: Having your component communicate with each API/service--and making it work with your product so YOUR integration is reliable and failsafe despite any issues with the other APIs/systems
 ## Future Work
 
