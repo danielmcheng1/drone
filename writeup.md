@@ -54,6 +54,10 @@ However, Airnest is free to use and functions as a convenient starter entry app 
 __DJI Ultimate Flight and Litchi__<br>
 These next two apps offer very similar features, with DJI Ultimate Flight coming in at $20, and Litchi at $20-25 depending on the system. Litchi is by far the most popular hobbyist drone app when browsing forums and drone enthusiast sites, and for good reason. 
 
+Both apps have very similar layouts to the DJI Go4 App, with a first-person video stream in front, camera options on the side, and toggling options for camera settings, waypoint behavior, etc.
+![Litchi landing screen](writeup_images/litchi_landingscreen.JPG)
+
+
 Litchi allows users to create far more customized automated missions than would be possible in the native DJI app. This includes:
 * Taking pictures (single shot and timed shot) at a waypoint
 * Recording video at a waypoint
@@ -61,23 +65,25 @@ Litchi allows users to create far more customized automated missions than would 
 * Pausing and hovering at a waypoint
 
 All of these actions are programmatically tied to a waypoint, and a series of waypoints are then joined to together to run as an automated mission. Users simply tap to create a waypoint, then tap again to toggle the various actions for each waypoint. The series of waypoints are then uploaded as a missiont to the drone. All that's left is to hit "Run Mission" and the app will fly the drone from start to finish!
+![Litchi landing screen](writeup_images/litchi_missionscreen.JPG)
  
-Both apps have very similar layouts to the DJI Go4 App, with a first-person video stream in front, camera options on the side, and toggling options for camera settings, waypoint behavior, etc.
 
 A couple differentiating features between the two:
 Additional features
 * Litchi Mission Planning hub
 * DJI panoramas and orbits during waypoint missions 
 
-![Litchi landing screen](writeup_images/litchi_landingscreen.JPG)
+__Autopilot__<br>
+This is the most advanced hobbyist app on the market. Users can precisely control every aspect of automated drone flight, from the exact camera angle and focus to the curvature and descent of flight between waypoints. 
 
-__Autopilot__
+The priciest of all these  apps ($29.95), Autopilot is ideally suited for those who need advanced automated flight control beyond what Litchi and DJI Ultimate Flight can offer. The learning curve is steeper due to the increased complexity offered for mission planning.
 
 [//]: # (include screenshot)
 
 ### Enterprise Apps for Surveyance
 These apps diverge from the native DJI UI--while they do provide flight automation, the app itself is a tool, a means towards an end. 
-That end is photogrammetry--generating a high-resolution or even 3D model via scores and hundreds of drone pictures. Hence enterprise is their target.
+That end is photogrammetry--generating a high-resolution or even 3D model via scores and hundreds of drone pictures. Hence these apps tend to target professional or enterprise customers who are willing to pay more for the photo editing tool on the backend. And who need an app that will fly hundreds of missions over a large area.
+ enterprise is their target.
 1. Flying Precision
 2. Pix4D
 3. Drone Deploy
@@ -87,10 +93,19 @@ _Cost_
 
 _System Availibility_
 
+### Justification/Result of App Evaluation 
+None of the existing app could fulfill the minimum criteria necessary for this drone product.
+
+Litchi came closest with its mission planning interface and automated flights, but failed to offer photo caching--essential for immediate display of images on the web service.
+
+Pix4D was a close second since it automatically streamed images to the phone upon completion of the mission, but its mission planning was quite rigid. Because the app functioned as a means towards surveying a region, the quality and rate of image capture was automated and locked away in a black box--hence you had no ability to customize taking pictures at different angles and speeds. 
+
+Finally, none of the apps offered a way to automatically trigger a mission through a different medium (e.g. SMS). Ultimately you would still have to manually press a button to start the mission.
 
 ## SDK Exploration
 
 ## App Building
+### Criteria for Minimum Viable Product 
 
 ## App Troubleshooting
 
