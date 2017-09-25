@@ -126,10 +126,38 @@ Pix4D was a close second since it automatically streamed images to the phone upo
 Finally, none of the apps offered a way to automatically trigger a mission through a different medium (e.g. SMS). Ultimately you would still have to manually press a button to start the mission.
 
 ## SDK Exploration
+### Criteria for Minimum Viable Product 
+Developing a full-fledge app similar to Litchi would take far longer than a few days, hence I had to identify the exact functions that my custom app would have to perform to complete the drone product. 
+
+_Features Available in Existing Apps_<br>
+* __Mission Automation__: One button to take off from ground, fly to waypoints, take photos, and land 
+* __Photo Caching__: Photos should automatically be saved on phone internal storage 
+* __Image Focus/Quality__: Camera should auto focus and expose throughout to avoid blurriness and low-resolution images  
+
+_New Features_<br> 
+Scheduled Missions:
+Triggered Missions:
+Photo Compression:
+Photo Transfer:
+
+### Initial Exploration of SDK
+Before jumping into coding all of these functions, I first determined whether the existing mobile SDK could indeed achieve each of the minimum criteria listed above. Otherwise, an alternative to the SDK would have to be used should any of the above features seem infeasible during this exploration stage.
+
+Feature | SDK Class | SDK Method
+------- | --------- | ----------
+Mission Automation | MissionBuilder | addWaypoint, addAction, loadMission, startMission 
+Photo Caching | MediaManager | onNewFile, fetchFileData
+Image Quality | Camera | setFocusmode
+
+Feature | Android Package
+------- | ---------------
+Scheduled Missions | Timer
+Triggered Missions | BroadcastReceiver / SMS Manager
+Photo Compression | ImageUtil
+Photo Transfer| JSch
 
 ## App Building
-### Criteria for Minimum Viable Product 
-
+To speed up building 
 ## App Troubleshooting
 
 ## Web Service
