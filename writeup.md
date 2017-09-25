@@ -156,13 +156,78 @@ Triggered Missions | BroadcastReceiver / SMS Manager
 Photo Compression | ImageUtil
 Photo Transfer| JSch
 
-## App Building
-To speed up building 
-## App Troubleshooting
+## Android App Development
+### Initial Build (Alpha)
+I had two options for learning Android app development:
+1. Ground-up Approach: Watch tutorial videos, learn Android basics, test out a sample app
+2. Copy and Modify: 
 
+The first option would be preferable for building a stronger foundation for undersatnding Android architecture (far different from say, the architecture of a desktop Java app). However, with only 3 days allocated for app development, I chose the second option. I identified a [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) for connecting a custom mobile app to a DJI drone, then copied the [tutorial code](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time understanding how to setup product registration, drone connectivity, and basic live-camera streaming, I utilized the existing tutorial app and focused on building each of the minimum viable features listed up above.
+
+__Day 1__
+<br>[x] Compile and run tutorials 
+<br>[x] Set up live video stream 
+<br>[x] Create button to take a photo during drone flight
+<br>[x] Troubleshoot Android permissions on Marshmallow 
+
+__Day 2__:  
+<br>[x] Programmatically set autofocus 
+<br>[x] Automatically take off
+<br>[x] Automatically land 
+<br>[x] Download photos to internal storage 
+
+__Day 3__:
+<br>[x] Add waypoints based on GPS coordinates
+<br>[x] Add custom actions at each waypoint (start timed shot, rotate gimbal, etc.) 
+<br>[x] Upload multiple waypoints as one mission to the flight controller 
+
+__Day 4__:
+<br>[x] Test complete execution of mission with automatic timed shots 
+<br>[x] Create button to trigger mission every 5/10/15 minutes 
+<br>[x] Resize images from 5 MB to 0.2 MB 
+<br>[x] Post resized images to EC2 server backend 
+
+__Day 5__:
+<br>[x] Create button to listen for SMS trigger for kicking off mission 
+<br>[x] Automatically save photos in timestamped mission folder (locally and on server)
+<br>[x] Test complete execution of mission with automatic resize and upload to server 
+ 
+
+
+### App Troubleshooting / Hardest Problems
+* Marshmallow permissions 
+* Download bandwidth 
+* Scheduling waypoint missions 
+* SCP transfer
+   * how to transfer quickly 
+   * notify other system complete 
+   
+### Other Technical Learnings 
+* Android Studio/Gradle
+* DJI Assistant/Simulator
+* ADB Logging Tools
+* Java Concepts
+   * Enums
+   * Builders 
+   * Callbacks
+   * Implementing and extending 
+   * Synchronizing / multithreading 
+* Android Concepts
+   * Android Life Cycle (onPause, onResume, onDestroy, etc.)
+   * Multithreading (UI thread, main thread, etc.)
+   * Broadcast receiver and intent filters
+   * Permissions 
+   
 ## Web Service
 
 ## Final Architecture
+__Android App__<br>
+* Image Resize
+* ScpTo
+* SMS Processor
+* Custom exceptions
+* Waypoint mission flying
+* Live video feed
 
 ## Future Work
 
