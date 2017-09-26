@@ -198,9 +198,9 @@ __Day 5__:
  
 
 ### App Troubleshooting / Hardest Problems
-Below are a sampling of the more complex problems I ran into during app development 
+Below are sample complex problems I ran into during app development 
 * Download bandwidth and multithreading 
-During my first code iteration, I automatically triggered file download to local phone storage:
+During my first code iteration, I automatically triggered file download to local phone storage. That is, whenever the DJI camera app generated a new file, it would automatically start downloading the file data:
 ```java 
 camera.setMediaFileCallback(new MediaFile.Callback() {
     @Override
@@ -218,10 +218,28 @@ camera.setMediaFileCallback(new MediaFile.Callback() {
     }
 }
 ```
+This feature appeared to work perfectly when testing indoors in the DJI simulator (a virtual flight software allowing execution of missions on the computer). 10-20 photos would be captured and downloaded automatically throughout mission flight.
 
-Thus taking a newphotos would trigger the onNewFile callback, which would then start fetching the file data to download theimage to local storage. This feature appeared to work perfectly when testing in the DJI simulator (a virtual flight software allowing execution of missions on the computer) 
+However, upon running the exact same missions outside, only the first 5 or 6 images would download. The rest would raise a timeout error and block all subsequent downloads. I had two hypotheses for debugging this failure to download photos:
+* __Transmission Distance__: Failure due to increased radio distance transmission when flying outdoors
+* __Limited Bandwith__: Failure due to limited CPU or bandwidth for downloading media files
+ To test these hypotheses, I first ran a more extensive stress by trying to download all the photos at the end of the mission, when the drone was within a few feet of me. Despite this adjustment, I still ran into similar download issues. 
 
-However, upon running the exact same missions outside, only the first 5 or 6 images would download. The rest would raise a timeout error.
+Moving onto the second hypothesis, I found supporting documentation in a DJI developer thread regarding timeout due to limited bandwith. By downloading the data as soon as a new file was generated, I had consumed all the bandwith by the time the mission had taken its 10th or 11th automatic photo. Furthermore, I did not consistently observe this error during simulator testing because the overall system load was lower; that is, when flying outside, the drone system had to allocate additional resources towards flight control, as opposed to merely simulating flight indoors. 
+
+In typical software development. one needs to execute three types of tests:
+1. __Fault Testing__: The program should correctly executes its intended function 
+2. __Stability Testing__: The program should reliably execute its function as frequently as possible (even if one or two cases fail)
+3. __Stress Testing__: The program should execute properly when scaled up to production level
+
+Hence my automatic photo download failed stress testing because the simulator environment did not fully capture the load during production (i.e. when flying outside). 
+
+
+
+ and observed whether any timeout
+Failure due to limited CPU and bandwith 
+
+
 stress testing 
 * Scheduling waypoint missions 
 * SCP transfer
