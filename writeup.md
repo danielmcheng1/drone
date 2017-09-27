@@ -324,6 +324,12 @@ mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExt
    * Permissions 
    
 ## Web Service
+On the last day of my project timeline, I built the web service in Flask. The minimum criteria for completion was as follows:
+* Automatic refresh of latest images from drone 
+* Fast historical image browsing 
+* Playback of historical images 
+* Responsive on mobile 
+Built as a fully responsive Bootstrap site, 
 
 ## Final Architecture
 __Android App__<br>
