@@ -3,8 +3,23 @@ _Author: Daniel Cheng_<br>
 _Date: 9/2/17 to 9/17/17_
 
 [//]: # (better name based off of thesis?)
+[Click here](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos) to see the final web service.
+
+[//]: # (include embedded page/screenshot) 
+
+Architecture<br>
+![Diagram of project architecture](writeup_images/drawio_architecture.JPG)
 
 ## Project Brainstorming
+
+## User Story
+User Stories (Cohn) are a popular way to capture requirements used in Agile software development (Martin). These are a collection of features that need to be developed for the next iteration of the program. They are often phrased as a simple task that a certain user role needs the system needs to perform.
+
+The raison d’être for this program is to help new franchisees choose which store location to open their new store in from a given list of locations they are considering. The following requirements are the heart of the project.
+
+As a new business owner:
+
+I want a metric for my prospective rental location indicating its desirability.
 
 ## Initial Timeline / Sprint Plan
 initial take photo and save to site
@@ -162,11 +177,7 @@ Android was chosen as the development platform for two reasons:
 1. __Existing hardware__: I had an Android phone readily available for installing and debugging 
 2. __Flexibility__: Android generally offers more developer control (e.g. I was more likely to be able to control and access where photos were stored locally)
 
-I had two options for learning Android app development:
-1. Ground-up Approach: Watch tutorial videos, learn Android basics, test out a sample app
-2. Copy and Modify: 
-
-The first option would be preferable for building a stronger foundation for undersatnding Android architecture (far different from say, the architecture of a desktop Java app). However, with only 3 days allocated for app development, I chose the second option. I identified a [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) for connecting a custom mobile app to a DJI drone, then copied the [tutorial code](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time understanding how to setup product registration, drone connectivity, and basic live-camera streaming, I utilized the existing tutorial app and focused on building each of the minimum viable features listed up above.
+As I had no prior Android app development experience--and given the limited timeframe for project completion--I identified a [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) for connecting a custom mobile app to a DJI drone, then copied the [tutorial code](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time understanding how to setup product registration, drone connectivity, and basic live-camera streaming, I utilized the existing tutorial app and focused on building each of the minimum viable features listed up above.
 
 __Day 1__
 <br>[x] Compile and run tutorials 
@@ -197,9 +208,8 @@ __Day 5__:
 <br>[x] Test complete execution of mission with automatic resize and upload to server 
  
 
-### App Troubleshooting / Hardest Problems
-Below are sample complex problems I ran into during app development 
-* Download bandwidth and multithreading 
+### App Troubleshooting: Synchronization and Multithreading 
+_Debugging / Problem Scope_ 
 During my first code iteration, I automatically triggered file download to local phone storage. That is, whenever the DJI camera app generated a new file, it would automatically start downloading the file data:
 ```java 
 camera.setMediaFileCallback(new MediaFile.Callback() {
@@ -222,10 +232,10 @@ This feature appeared to work perfectly when testing indoors in the DJI simulato
 
 However, upon running the exact same missions outside, only the first 5 or 6 images would download. The rest would raise a timeout error and block all subsequent downloads. I had two hypotheses for debugging this failure to download photos:
 * __Transmission Distance__: Failure due to increased radio distance transmission when flying outdoors
-* __Limited Bandwith__: Failure due to limited CPU or bandwidth for downloading media files
+* __Limited Bandwidth__: Failure due to limited CPU or bandwidth for downloading media files
  To test these hypotheses, I first ran a more extensive stress by trying to download all the photos at the end of the mission, when the drone was within a few feet of me. Despite this adjustment, I still ran into similar download issues. 
 
-Moving onto the second hypothesis, I found supporting documentation in a DJI developer thread regarding timeout due to limited bandwith. By downloading the data as soon as a new file was generated, I had consumed all the bandwith by the time the mission had taken its 10th or 11th automatic photo. Furthermore, I did not consistently observe this error during simulator testing because the overall system load was lower; that is, when flying outside, the drone system had to allocate additional resources towards flight control, as opposed to merely simulating flight indoors. 
+Moving onto the second hypothesis, I found supporting documentation in a DJI developer thread regarding timeout due to limited bandwidth. By downloading the data as soon as a new file was generated, I had consumed all the bandwidth by the time the mission had taken its 10th or 11th automatic photo. Furthermore, I did not consistently observe this error during simulator testing because the overall system load was lower; that is, when flying outside, the drone system had to allocate additional resources towards flight control, as opposed to merely simulating flight indoors. 
 
 In typical software development. one needs to execute three types of tests:
 1. __Fault Testing__: The program should correctly executes its intended function 
@@ -234,17 +244,68 @@ In typical software development. one needs to execute three types of tests:
 
 Hence my automatic photo download failed stress testing because the simulator environment did not fully capture the load during production (i.e. when flying outside). 
 
+_Solution_<br>
+To workaround the limited bandwidth for downloading media files using the DJI SDK, I applied two software techniques:
+1. Maintain a queue of downloads 
+2. Apply a mutex to prevent multithreaded callbacks  
 
+Implementing the queue was as simple as adding new files into an array list:
+```java 
+camera.setMediaFileCallback(new MediaFile.Callback() {
+    @Override
+    public void onNewFile(MediaFile mediaFile) {
+        addNewMediaFileToQueue(mediaFile);
+    }
+}
+```
 
- and observed whether any timeout
-Failure due to limited CPU and bandwith 
+However, simply dequeueing element by element and calling the download method failed due to multithreading.
+```java
+while(!mMediaFilesToDownload.isEmpty()) {
+    MediaFile mediaFile = mMediaFilesToDownload.remove(mMediaFilesToDownload.size());
+    downloadOneMediaFile(mediaFile, label);
+}
+``` 
+Because array lists are not synchronized structures, multiple threads were popping off and attempting to download, which not only cause concurrent write conflicts, but also led to multiple downloads executing in parallel (which ultimately consumed all available download bandwidth).
 
+This was easily remedied by either (1) making the method synchronized, or (2) iterating without removing. 
+```java
+while(!mMediaFilesToDownload.isEmpty()) {
+    MediaFile mediaFile = mMediaFilesToDownload.remove(mMediaFilesToDownload.size());
+    // avoid repeated download if method is called again 
+    if (!mMediaFileNamesDownloaded.contains(mediaFile.getFileName())) {
+        downloadOneMediaFile(mediaFile, label);
+    }
+}
+```
 
-stress testing 
-* Scheduling waypoint missions 
-* SCP transfer
-   * how to transfer quickly 
-   * notify other system complete 
+However, this dequeueing approach still failed to prevent overloaded download bandwith because the SDK download call was executed as a callback. Thus, even though files were dequeued sequentially, one at a time, the callbacks could end up executing simultaneously on the background thread.
+
+Hence, to solve this, I implemented a mutex so that only one file could be downloading at any given time. This guaranteed that even if multiple callbacks were triggered, only one file could download at once--hence ensuring sufficient download bandwidth.
+
+Note that although this solution executed more slowly than download multiple files in parallel, this solution was far more reliable--a more valuable feature in this case to ensure that all images would be loaded to the server.
+
+```java   
+mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExtension, new DownloadListener<String>() {
+    @Override
+    public void onStart() {
+        mMediaDownloadOneFileLock.lock();
+    }
+    public void onSuccess(String s) {
+        try {
+            // resize image 
+            // SCP to EC2 server 
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            mMediaDownloadOneFileLock.unlock();
+        }
+    }
+    public void onFailure(String s) {
+        mMediaDownloadOneFileLock.unlock();
+    }
+}
+```
    
 ### Other Technical Learnings 
 * Android Studio/Gradle
