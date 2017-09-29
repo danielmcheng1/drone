@@ -329,7 +329,73 @@ On the last day of my project timeline, I built the web service in Flask. The mi
 * Fast historical image browsing 
 * Playback of historical images 
 * Responsive on mobile 
+
+__Architecture__<br>
+[//]: # diagram 
+[left to right] 
+SCP sharing folder
+Images with final stitched/cleaned photos
+Merge to find differences 
+-->hugin executor 
+-->CV2 image reiszing/rotation 
+-->Flask server / Jinja generates  template -->hosting on EC2 
+
+front end client views this 
+-->Javascript front end for animation, browsing, and refreshing 
+loops back to front 
+
+__Find the latest refresh__ 
+[//]: # (tree snapshot)
+During mission execution, images are automatically saved into timestamped folders by mission ID. These raw images are pushed from Android local storage to the SCP share location.
+
+The final processed images for displaying on the web are placed in an identical folder structure. Hence to determine new mission executions since the last refrehs, I simply compare the two folder structures and process any folder names that are in the SCP share location but not in the static/images location. 
+
+__Hugin Executor__ 
+For certain missions, the drone takes a series of timed shots--hence these photos need to be stitched together to construct the final blended photo. 
+
+I selected Hugin, an open source photo processing package, because it fulfilled the two minimum requirements for stitching:
+1. Any number of images could be correctly blended into one final image 
+2. The stitching process could be automated as a script
+
+Hugin offers Hugin Executor, a command line utility for stitching, aligning, and processing photos. Stitching is achieved by calling various other photo processing packages, such as nona, enblend, and cpfind. These implement algorithms like Dijkstra's two point alignment and [...].
+
+The one unforeseen problem with Hugin Executor was its requirements for high CPU usage, which exceeded the capacity of the EC2 I used for hosting. One solution was to simply upgrade the EC2, but I chose instead to write a simple script to cap CPU usage by Hugin and all its derivative processors. Even a larger box, I would need some way to guarantee that Hugin did not consume too much compute power; hence limiting CPU was the simplest and fastest solution towards a viable product.
+
+```bash
+nohup cpulimit --exe=/usr/bin/cpfind --limit=75 &
+disown
+
+nohup cpulimit --exe=/usr/bin/nona --limit=75 &
+disown
+
+nohup cpulimit --exe=/usr/bin/hugin_executor --limit=75 &
+disown
+
+nohup cpulimit --exe=/usr/bin/hugin_project --limit=75 &
+disown
+
+nohup cpulimit --exe=/usr/bin/enblend --limit=75 &
+disown 
+
+nohup cpulimit --exe=/usr/bin/cpclean --limit=75 &
+disown 
+
+nohup cpulimit --exe=/usr/bin/linefind --limit=75 &
+disown
+```
+
+
+
+
+ , it was essneitla 
+__Implementation__<br>
+1. 
 Built as a fully responsive Bootstrap site, 
+* Set up Flask hosting and routing on EC2
+* Detect any new missions executed since the previous refresh 
+* Automatically stitch and align photos for viewing 
+* Generate HTML dynamically based on input list of photos 
+* Build responsive site --> boostrap template
 
 ## Final Architecture
 __Android App__<br>
