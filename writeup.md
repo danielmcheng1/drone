@@ -13,7 +13,7 @@ Architecture<br>
 ## Project Raison D'Etre
 Drone adoption has rapidly grown over the last few years, from search-and-rescue missions and aerial surveyance prior to excavation, to automated package delivery and photo shoots for personal enjoyment. 
 
-This project prototypes a new application of drones as photo subscription service. The offered service falls into two categories of user stories. 
+This project prototypes a new application of drones as photo subscription service. The offered service falls into two categories of high-level user stories. 
 
 __Requesting a photo NOW__<br> 
 * As a city worker, I want to know how many street parking spots areo open so that I can park in the closest spot to my office
@@ -28,11 +28,26 @@ __Analyzing historical images__<br>
 Hence, this drone service automates photo capture so that subscribers can easily count cars and people in real-time for any location of interest. 
 
 ## Criteria for Sucess 
-I broke down the above project objective into the following criteria for a minimum viable product.  
+The above project objective can broken down into the following criteria for a minimum viable product.  
 
-As a user of this drone service, I need to have the ability to:
-1. Request a photo capture right now 
-2. Browse current and historical images for my location of interest 
+_As a user of this drone service, I need to have the ability to:_
+1. Request a photo capture right NOW 
+2. Browse current AND historical images for my location of interest 
+
+To further breakdown the complexity of this project, I defined the following timeline for completing each project component. This prototype was completed in 16 days.
+
+//add timeline 
+* Day 1: Take one manual photo with a drone and display in real-time on website 
+* Day 2 - 3: Take five automated pictures along a predetermined flight route and display in real-time on website 
+* Day 4: Schedule drone to fly flight route every 15 minutes 
+* Day 5 - 6: Blend photos together and show animated gif over time 
+* Day 7: Request for drone to fly now based off of SMS trigger 
+* Day 8: Enable automated SMS updates and MMS photo sharing 
+* Day 9: Finalize website and optimize for mobile
+* Day 10: Automatically count cars in photos 
+* Day 11 - 12: Build system for multiple drones
+* 
+
 
 ## User Story
 User Stories (Cohn) are a popular way to capture requirements used in Agile software development (Martin). These are a collection of features that need to be developed for the next iteration of the program. They are often phrased as a simple task that a certain user role needs the system needs to perform.
