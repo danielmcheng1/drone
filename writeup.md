@@ -10,7 +10,29 @@ _Date: 9/2/17 to 9/17/17_
 Architecture<br>
 ![Diagram of project architecture](writeup_images/drawio_architecture.JPG)
 
-## Project Brainstorming
+## Project Raison D'Etre
+Drone adoption has rapidly grown over the last few years, from search-and-rescue missions and aerial surveyance prior to excavation, to automated package delivery and photo shoots for personal enjoyment. 
+
+This project prototypes a new application of drones as photo subscription service. The offered service falls into two categories of user stories. 
+
+__Requesting a photo NOW__<br> 
+* As a city worker, I want to know how many street parking spots areo open so that I can park in the closest spot to my office
+* As a commuter, I want to now how long the line is at my local carpooling stop so that I can decide whether to leave now 
+* As a busy young working professional, I want to know how long the line is at my favorite restaurant so that I can avoid standing in a long line 
+
+__Analyzing historical images__<br>
+* As a city engineer, I want to know the daily usage of parking spots so that I can analyze the effect of increasing or decreasing free parking spots 
+* As a marketer, I want to understand the demographic distribution of shoppers at IKEA so that I can design more targeted advertisements
+[//]: # ( * As a real estate investor, I want to survey properties so that I can evaluate the value of my potential investment)
+
+Hence, this drone service automates photo capture so that subscribers can easily count cars and people in real-time for any location of interest. 
+
+## Criteria for Sucess 
+I broke down the above project objective into the following criteria for a minimum viable product.  
+
+As a user of this drone service, I need to have the ability to:
+1. Request a photo capture right now 
+2. Browse current and historical images for my location of interest 
 
 ## User Story
 User Stories (Cohn) are a popular way to capture requirements used in Agile software development (Martin). These are a collection of features that need to be developed for the next iteration of the program. They are often phrased as a simple task that a certain user role needs the system needs to perform.
