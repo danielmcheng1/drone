@@ -350,7 +350,7 @@ During mission execution, images are automatically saved into timestamped folder
 
 The final processed images for displaying on the web are placed in an identical folder structure. Hence to determine new mission executions since the last refrehs, I simply compare the two folder structures and process any folder names that are in the SCP share location but not in the static/images location. 
 
-__Hugin Executor__ 
+__Image Processing__<br> 
 For certain missions, the drone takes a series of timed shots--hence these photos need to be stitched together to construct the final blended photo. 
 
 I selected Hugin, an open source photo processing package, because it fulfilled the two minimum requirements for stitching:
@@ -384,18 +384,26 @@ nohup cpulimit --exe=/usr/bin/linefind --limit=75 &
 disown
 ```
 
+Finally, I utilized the Python CV2 library for final image clean-up, including compressing and converting Hugin output tif to jpeg images.
+
+__Flask Hosting__<br>
+Because I architected my SCP sharing site and image hosting folder with a mission ID-date-timestamp hierarchy, it was simple to iterate over each processed mission folder and generate an HTML template where users could:
+1. Scroll down the page and views pictures grouped by day 
+2. Browse within a day and views pictures sorted by timestamp 
+
+Using the Jinja engine, I dynamically generated the HTML template for displaying all images. 
+
+__Front End__<br>
+To display the mission images in a clean user-friendly front-end interface, I utilized bootstrap for basic styling. This also ensured responsiveness across devices. 
+
+I then coded Javascript functions so that users could:
+1. Click and zoom in on images (pinch and zoom on mobile) 
+2. Click to browse pictures sorted by timestamp within a given day 
+3. Click to animate the photos (essentially showing a gif for a given day) 
+
+Finally, because Flask does not enable auto refreshing of a page from the back-end server, I implemented a Javascript callback to trigger a refresh every 60 seconds. While not ideal, this solution sufficed for this prototype. Future iterations can implement a method to refresh immediately when a new image is found.
 
 
-
- , it was essneitla 
-__Implementation__<br>
-1. 
-Built as a fully responsive Bootstrap site, 
-* Set up Flask hosting and routing on EC2
-* Detect any new missions executed since the previous refresh 
-* Automatically stitch and align photos for viewing 
-* Generate HTML dynamically based on input list of photos 
-* Build responsive site --> boostrap template
 
 ## Final Architecture
 __Android App__<br>
