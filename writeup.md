@@ -64,7 +64,7 @@ If by Day 5 in my timeline, I indeed could not find an existing product for sche
 
 ## Drone Setup 
 ![Mavic Pro](writeup_images/mavicpro1.png)
-_Justification for DJI Drone_
+__Justification for DJI Drone__<br>
 I chose to use the DJI Mavic Pro for this project for two reasons. First, DJI is the clear leader in the consumer drone space, owning perhaps [50% of the North American market] (https://www.recode.net/2017/4/14/14690576/drone-market-share-growth-charts-dji-forecast). My project was focused on software rather than hardware--so I wanted to pick the most reliable hardware available, thus avoiding having to troubleshoot flight control or camera issues.
 
 Secondly, DJI offer [programmatic control] (https://developer.dji.com/mobile-sdk/documentation/introduction/mobile_sdk_introduction.html) of its drones, opening up the possibility of advanced customized control over the drone's flight. 
@@ -523,9 +523,10 @@ Several commercial products have been developed to address this need:
 I would explore these products in more depth to determine compatibilitiy with current drone setup (as they may not work with DJi drones), and to evaluate cost tradeoffs (e.g. robotic battery swapping machine may cost far more than simply having a worker manually swap batteries for my service). 
 
 ## Final Takeaways
-o	BREAKDOWN PROBLEM—e.g. API make it as explicit as possible and small as possible so that you make the MVP
-?	Make sure you scope as much of the problem so you know if feasible before investing more time
-o	You always try to find a prebuilt solution—like all these apps—instead of building your own. Much faster and smarter and safer
+SEE NOTES 
+BREAKDOWN PROBLEM—e.g. API make it as explicit as possible and small as possible so that you make the MVP
+Make sure you scope as much of the problem so you know if feasible before investing more time
+You always try to find a prebuilt solution—like all these apps—instead of building your own. Much faster and smarter and safer
 Agile Development:  Planning a project of unknown complexity, adjusting as unexpected obstacles come  up
 Minimum Viable Product: Quickly picking up and learning whatever techniques are necessary for MVP 
 Production Systems: Having your component communicate with each API/service--and making it work with your product so YOUR integration is reliable and failsafe despite any issues with the other APIs/systems
