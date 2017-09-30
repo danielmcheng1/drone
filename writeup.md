@@ -74,7 +74,7 @@ I specifically chose the Mavic Pro because of its popularity in taking high-qual
 _Side note on basic hardware terminology_: You control the drone aircraft using a remote controller, which transmits commands at 2.4 to 2.483 GHz. You can also connect your phone to the remote controller, allowing you to not only issue commands directly from an app, but to also view a live camera feed of the drone's point of view.
 ![Mavic Pro Remote Controller](writeup_images/mavicprocontroller.png)
 
-_Initial Experimentation_ 
+__Initial Experimentation__<br>
 For the first two days, I experimented with the basics of flying a drone and taking photos. I first confirmed that the image quality was more than sufficient for my photo service (the photos came out as 12000 MP, a resolution far higher than most web browsers need for rendering). Secondly, I tested flying simple missions (i.e. automated flight) to better undersatnd how much of flight could be truly automated.
 
 During this phase, I ran into a roadblock with displaying the drone image in real-time on a website. When a photo is captured, the drone (by default) only stores the images on the SD card loaded on the physicial aircraft. I needed some way of automatically transferring those photos from the aircraft to my mobile device--so that I could then immediately push those photos to my web server. Otherwise, the images would remain stuck on the aircraft until it landed. Furthermore, this image transfer had to occur programmatically--I wanted to avoid having to manually transfer files from the SD card. Manual transfer would also make it difficult to automate scheduling and triggering. 
@@ -266,7 +266,7 @@ I chose Android as the development platform for two reasons:
 As I had no prior Android app development experience--and given the limited timeframe for project completion--I identified a [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) for connecting a custom mobile app to a DJI drone, then copied the [tutorial code](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time understanding how to setup product registration, drone connectivity, and basic live-camera streaming, I utilized the existing tutorial app and focused on building each of the minimum viable features listed up above.
 
 Below is a breakdown of which app features were successfully completed by project day:
-__Day 7__
+__Day 7__:
 <br>[x] Compile and run tutorials 
 <br>[x] Set up live video stream 
 <br>[x] Create button to take a photo during drone flight
@@ -414,7 +414,8 @@ mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExt
    * Broadcast receiver and intent filters
    * Permissions 
    
-__Final Architecture of Android App__<br>
+### Final Architecture of Android App
+//replace with zoomed in view of diagram 
 * Image Resize
 * ScpTo
 * SMS Processor
@@ -515,9 +516,9 @@ Should this prove successful, I would then scale this up:
 This is currently the difficulty with almost all consumer drones: A single battery can last for approximately 25 minutes of flight. Hence to fly missions over the span of several hours requires human intervention to swap and recharge batteries. 
 
 Several commercial products have been developed to address this need:
-* Skysense: Wireless charging (drone charges upon landing on pad--no manual battery swap needed) 
-* Dronebox: Solar-powered autonomous charging stations
-* Airobotics: Robotic arm automatically swaps batteries and payloads in and out
+* __Skysense__: Wireless charging (drone charges upon landing on pad--no manual battery swap needed) 
+* __Dronebox__: Solar-powered autonomous charging stations
+* __Airobotics__: Robotic arm automatically swaps batteries and payloads in and out
 
 I would explore these products in more depth to determine compatibilitiy with current drone setup (as they may not work with DJi drones), and to evaluate cost tradeoffs (e.g. robotic battery swapping machine may cost far more than simply having a worker manually swap batteries for my service). 
 
