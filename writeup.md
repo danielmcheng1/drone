@@ -84,39 +84,37 @@ To deliver on this feature, I had to find a software app that could reliably dow
 Should this prove impossible, I had a backup plan to install an Eyefi card on the aircarft--so that at the very least, images could automatically transmit once the drone landed in the wifi area. In this case, photos could not be streamed instantly, but this would still allow for fully automated upload and subsequent processing of images taken by the drone. 
 
  
-SDK exploration 
-timeline change 
-future steps 
 ## Existing App Evaluation / Magic Quadrant
 Given my first two days of drone exploration, I now focused my efforts on finding an existing mobile app providing functionality to:
-1. Automate flying missions
+1. Take photos while flying a preset flight path
 2. Cache photos
-3. Enable scheduled and/or triggered missions 
+3. Schedule and/or trigger missions 
 
 You may ask why I did not immediately attempt to write my own mobile app to accomplish all of my required features. In software development, it is better practice to first use existing libraries and packages instead of writing your own custom solution. First, this can save significant time if you can simply plug in an existing app into your own custom architecture. Secondly, prebuilt libraries are usually better tested, having gone through multiple iterations before being shared for general use. 
 
 Hence, I wanted to exhaust existing solutions that could achieve the above three criteria, before considering alternate solutions (such as writing my own mobile application). 
 
 [//]: # (check spelling, cost, system availability)
-### Dimensions:
-* Logistics: Cost, system availability (= color)
-* Target Audience (Enterprise vs Hobbyist)
-* Similar to surveying/photogrammetry vs flying custom missions and active tracking for own
 
-### Native DJI Go4 App
+### Native DJI GO App
+![DJI Go App](writeup_images/djigoapp1.png)
 
-Features Supported
-* Automatic caching of photos
-* Good focus / image quality
+When flying the drone for the first time, DJI recommends using its [DJI GO App] (https://www.dji.com/goapp). This app runs comprehensive startup validation (e.g. compass calibrated, GPS connected), then offers a full suite of in flight controls, including:
+* Single shot, timed shot, and video capture 
+* Camera tuning (adjusting focus, exposure, and orientation) 
+* Photo caching (save photos to phone storage) 
+* Waypoint missions (automatically flying the drone along a predetermined set of GPS coordinates)
 
-Missing Features
-* __Mission  Automation__: 
+Thus the DJI GO App fulfilled criteria #2, but only partially achieved criteria #1. Although the app could automatically fly the drone along previously visited waypoints, it could not automate photo capture throughout the mission. As it turns out, the majority of other consumer apps allow for more advanced control over waypoint missions (criteria #2), but fail to allow for photo caching (criteria #1). The next section evaluates these feature tradeoffs amongst the most popular DJI drone apps. 
 
+SDK exploration 
+timeline change 
+future steps 
 ### Hobbyist Apps for Recreation
 These apps target single user consumer flying drones primarily for personal recreation. 
 
 Their interface is very similar to the native DJI Go4 App (in essence they've provided an extra UI layer for further customization off of the DJI SDK). 
-purely for recreation. They enhance the automation section (what's that called??) in the app (such as Follow Me, Active Track, Waypoint Missions, Orbit, and Panorama). For example, for the waypoint missions, these apps allow you to mark destinations on a map, then convert these into a drone mission--unlike the DJI Go4 App which requires you to fly the drone through all these destinations before rerunning.
+purely for recreation. They enhance the Intelligent Flight modes in the app (such as Follow Me, Active Track, Waypoint Missions, Orbit, and Panorama). For example, for the waypoint missions, these apps allow you to mark destinations on a map, then convert these into a drone mission--unlike the DJI Go4 App which requires you to fly the drone through all these destinations before rerunning.
 
 In increasing order of both cost and customizability:
 1. Airnest 
