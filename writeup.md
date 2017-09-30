@@ -107,9 +107,6 @@ When flying the drone for the first time, DJI recommends using its [DJI GO App] 
 
 Thus the DJI GO App fulfilled criteria #2, but only partially achieved criteria #1. Although the app could automatically fly the drone along previously visited waypoints, it could not automate photo capture throughout the mission. As it turns out, the majority of other consumer apps allow for more advanced control over waypoint missions (criteria #2), but fail to allow for photo caching (criteria #1). The next section evaluates these feature tradeoffs amongst the most popular DJI drone apps. 
 
-SDK exploration 
-timeline change 
-future steps 
 ### Hobbyist Apps for Recreation
 These apps target single user consumer flying drones primarily for personal recreation. 
 
@@ -188,10 +185,6 @@ Other touted features include:
 * Analysis of # of batteries needed for flight
 * Automatic continuation of a mission should it be aborted midway through
 
-### Logistics 
-_Cost_
-
-_System Availibility_
 
 ### Justification/Result of App Evaluation 
 None of the existing app could fulfill the minimum criteria necessary for this drone product.
@@ -209,15 +202,16 @@ Developing a full-fledge app similar to Litchi would take far longer than a few 
 _Features Available in Existing Apps_<br>
 * __Mission Automation__: One button to take off from ground, fly to waypoints, take photos, and land 
 * __Photo Caching__: Photos should automatically be saved on phone internal storage 
-* __Image Focus/Quality__: Camera should auto focus and expose throughout to avoid blurriness and low-resolution images  
+* __Image Quality__: Camera should auto focus and expose throughout to avoid blurriness and low-resolution images  
 
 _New Features_<br> 
-Scheduled Missions:
-Triggered Missions:
-Photo Compression:
-Photo Transfer:
+* Scheduled Missions
+* Triggered Missions
+* Photo Compression
+* Photo Transfer
 
-### Initial Exploration of SDK
+
+### Problem Search / Initial Exploration of SDK
 Before jumping into coding all of these functions, I first determined whether the existing mobile SDK could indeed achieve each of the minimum criteria listed above. Otherwise, an alternative to the SDK would have to be used should any of the above features seem infeasible during this exploration stage.
 
 Feature | DJI SDK Class | DJI SDK Method
@@ -233,42 +227,77 @@ Triggered Missions | BroadcastReceiver / SMS Manager
 Photo Compression | ImageUtil
 Photo Transfer| JSch
 
+During this phase, I also identified troubleshooting resources, such as the [DJI developer forum] (http://forum.dev.dji.com) and [DJI posts on Stack Overflow] (https://stackoverflow.com/questions/tagged/dji-sdk). I additionally contacted DJI support to validate that it feasible to take photos and save them to phone storage during waypoint mission flight.
+
+## Revised Timeline 
+Once I determined that the DJI mobile SDK could implement all of my required features, I adjusted my initial timeline to account for the effort required to write an Android application. 
+
+At this point, six days had elapsed already. App development would take, at minimum, three days--and would likely take closer to five or six days. Hence I had to eliminate several features in my initial timeline, including:
+* Automated MMS photo sharing 
+* Setting up subscription service 
+* Prototyping system for multiple drones 
+
+These were features more conducive to a beta version of the app--but were clearly not necessary for the alpha version. Recall the minimum criteria for this drone service:
+
+_As a user of this drone service, I need to have the ability to:_
+1. Request a photo capture right NOW 
+2. Browse current AND historical images for my location of interest 
+
+Hence I chose to focus the majority of my remaining time on a custom app, because this would allow me to fulfill the above two criteria. 
+
+Finally, I also deprioritized writing code to automatically parse and count cars in these drone images. This was again a nice-to-have feature, but not strictly necessary. For example, users of this service could easily take a look at a photo of street parking and tell if any parking spots were open. Automatic object recognition was not strictly necessary for the success of this project prototype.  
+
+Hence my revised timeline was as follows: 
+* Days 7 - 9: Build Android app prototype with photo caching and automatic mission control 
+* Day 10: Add functionality to schedule missions 
+* Day 11: Add functionality to trigger missions 
+* Day 12: Troubleshoot and clean up app  
+* Day 13: Blend photos together and show animated gif over time 
+* Day 14 - 15: Finalize website and optimize for mobile
+* Day 16: Automatically count cars in photos 
+
+
 ## Android App Development
 ### Initial Build (Alpha)
-Android was chosen as the development platform for two reasons:
+I chose Android as the development platform for two reasons:
 1. __Existing hardware__: I had an Android phone readily available for installing and debugging 
 2. __Flexibility__: Android generally offers more developer control (e.g. I was more likely to be able to control and access where photos were stored locally)
 
 As I had no prior Android app development experience--and given the limited timeframe for project completion--I identified a [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) for connecting a custom mobile app to a DJI drone, then copied the [tutorial code](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time understanding how to setup product registration, drone connectivity, and basic live-camera streaming, I utilized the existing tutorial app and focused on building each of the minimum viable features listed up above.
 
-__Day 1__
+Below is a breakdown of which app features were successfully completed by project day:
+__Day 7__
 <br>[x] Compile and run tutorials 
 <br>[x] Set up live video stream 
 <br>[x] Create button to take a photo during drone flight
 <br>[x] Troubleshoot Android permissions (requested at runtime instead of on installation for >= Marshmallow)
 
-__Day 2__:  
+__Day 8__:  
 <br>[x] Programmatically set autofocus 
 <br>[x] Automatically take off
 <br>[x] Automatically land 
 <br>[x] Download photos to internal storage 
 
-__Day 3__:
+__Day 9__:
 <br>[x] Add waypoints based on GPS coordinates
 <br>[x] Add custom actions at each waypoint (start timed shot, rotate gimbal, etc.) 
 <br>[x] Upload multiple waypoints as one mission to the flight controller 
 
-__Day 4__:
+__Day 10__:
 <br>[x] Test complete execution of mission with automatic timed shots 
 <br>[x] Create button to trigger mission every 5/10/15 minutes 
 <br>[x] Resize images from 5 MB to 0.2 MB 
 <br>[x] Post resized images to EC2 server backend 
 
-__Day 5__:
+__Day 11__:
 <br>[x] Create button to listen for SMS trigger for kicking off mission 
 <br>[x] Automatically save photos in timestamped mission folder (locally and on server)
 <br>[x] Test complete execution of mission with automatic resize and upload to server 
  
+__Days 12 - 14__: 
+<br>[x] Troubleshoot multithreading / download bandwidth issues with caching photos 
+
+As evident in the above timeline, I completed the app prototype within the expected timeframe of six days, but I ran into a major roadblock with caching photos that consumed nearly three full days. 
 
 ### App Troubleshooting: Synchronization and Multithreading 
 _Debugging / Problem Scope_ 
@@ -385,8 +414,16 @@ mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExt
    * Broadcast receiver and intent filters
    * Permissions 
    
+__Final Architecture of Android App__<br>
+* Image Resize
+* ScpTo
+* SMS Processor
+* Custom exceptions
+* Waypoint mission flying
+* Live video feed
+
 ## Web Service
-On the last day of my project timeline, I built the web service in Flask. The minimum criteria for completion was as follows:
+After troubleshooting the photo caching issue described above, I had 1.5 days remaining to build the front-end web service in Flask. Given the tight timeline, I again winnowed down to the following  minimum criteria for completion. Note that this lists excludes automatic parsing / counting of cars within the images--as discussed before, this was a useful but not necessary feature of my envisioned service, and hence I chose to drop this so that I could deliver on the below essential features. 
 * Automatic refresh of latest images from drone 
 * Fast historical image browsing 
 * Playback of historical images 
@@ -465,23 +502,30 @@ I then coded Javascript functions so that users could:
 
 Finally, because Flask does not enable auto refreshing of a page from the back-end server, I implemented a Javascript callback to trigger a refresh every 60 seconds. While not ideal, this solution sufficed for this prototype. Future iterations can implement a method to refresh immediately when a new image is found.
 
+## Future Work 
+My next iteration of this drone service would add the following features: 
+* Automatically parse and count cars in the drone images 
+* Send MMS of images from the latest executed mission 
+* Set up subscription service for requesting drone to fly mission right now 
 
+Should this prove successful, I would then scale this up: 
+* Prototype software to coordinate and schedule  multiple drones flying throughout the day 
+* Minimize downtime for battery recharging
 
-## Final Architecture
-__Android App__<br>
-* Image Resize
-* ScpTo
-* SMS Processor
-* Custom exceptions
-* Waypoint mission flying
-* Live video feed
+This is currently the difficulty with almost all consumer drones: A single battery can last for approximately 25 minutes of flight. Hence to fly missions over the span of several hours requires human intervention to swap and recharge batteries. 
 
-Final Takeaways
+Several commercial products have been developed to address this need:
+* Skysense: Wireless charging (drone charges upon landing on pad--no manual battery swap needed) 
+* Dronebox: Solar-powered autonomous charging stations
+* Airobotics: Robotic arm automatically swaps batteries and payloads in and out
+
+I would explore these products in more depth to determine compatibilitiy with current drone setup (as they may not work with DJi drones), and to evaluate cost tradeoffs (e.g. robotic battery swapping machine may cost far more than simply having a worker manually swap batteries for my service). 
+
+## Final Takeaways
 o	BREAKDOWN PROBLEM—e.g. API make it as explicit as possible and small as possible so that you make the MVP
 ?	Make sure you scope as much of the problem so you know if feasible before investing more time
 o	You always try to find a prebuilt solution—like all these apps—instead of building your own. Much faster and smarter and safer
 Agile Development:  Planning a project of unknown complexity, adjusting as unexpected obstacles come  up
 Minimum Viable Product: Quickly picking up and learning whatever techniques are necessary for MVP 
 Production Systems: Having your component communicate with each API/service--and making it work with your product so YOUR integration is reliable and failsafe despite any issues with the other APIs/systems
-## Future Work
 
