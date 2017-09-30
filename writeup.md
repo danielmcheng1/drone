@@ -63,26 +63,40 @@ If by Day 5 in my timeline, I indeed could not find an existing product for sche
 2. Plan for having a manual release of the drone by a human worker. No matter how automated, this drone service would likely need some human intervention to maintain
 
 ## Drone Setup 
-![Litchi landing screen](writeup_images/mavicpro1.png)
+![Mavic Pro](writeup_images/mavicpro1.png)
 _Justification for DJI Drone_
 I chose to use the DJI Mavic Pro for this project for two reasons. First, DJI is the clear leader in the consumer drone space, owning perhaps [50% of the North American market] (https://www.recode.net/2017/4/14/14690576/drone-market-share-growth-charts-dji-forecast). My project was focused on software rather than hardware--so I wanted to pick the most reliable hardware available, thus avoiding having to troubleshoot flight control or camera issues.
 
 Secondly, DJI offer [programmatic control] (https://developer.dji.com/mobile-sdk/documentation/introduction/mobile_sdk_introduction.html) of its drones, opening up the possibility of advanced customized control over the drone's flight. 
 
 I specifically chose the Mavic Pro because of its popularity in taking high-quality aerial photography. It also automates many parts of drone piloting, from takeoff and landing to intelligent flight modes. Again, the focus of this project was on software and not hardware--hence I wanted to use a drone that would automate as much of the piloting experience as possible. 
- 
-_Initial Experimentation_ 
 
+_Side note on basic hardware terminology_: You control the drone aircraft using a remote controller, which transmits commands at 2.4 to 2.483 GHz. You can also connect your phone to the remote controller, allowing you to not only issue commands directly from an app, but to also view a live camera feed of the drone's point of view.
+![Mavic Pro Remote Controller](writeup_images/mavicprocontroller.png)
+
+_Initial Experimentation_ 
+For the first two days, I experimented with the basics of flying a drone and taking photos. I first confirmed that the image quality was more than sufficient for my photo service (the photos came out as 12000 MP, a resolution far higher than most web browsers need for rendering). Secondly, I tested flying simple missions (i.e. automated flight) to better undersatnd how much of flight could be truly automated.
+
+During this phase, I ran into a roadblock with displaying the drone image in real-time on a website. When a photo is captured, the drone (by default) only stores the images on the SD card loaded on the physicial aircraft. I needed some way of automatically transferring those photos from the aircraft to my mobile device--so that I could then immediately push those photos to my web server. Otherwise, the images would remain stuck on the aircraft until it landed. Furthermore, this image transfer had to occur programmatically--I wanted to avoid having to manually transfer files from the SD card. Manual transfer would also make it difficult to automate scheduling and triggering. 
+
+To deliver on this feature, I had to find a software app that could reliably download or cache all images captured during a flight to local storage. Photos could then be pushed (using an app like [BotSync] (https://play.google.com/store/apps/details?id=com.botsync)) to the EC2 hosting my web server. 
+
+Should this prove impossible, I had a backup plan to install an Eyefi card on the aircarft--so that at the very least, images could automatically transmit once the drone landed in the wifi area. In this case, photos could not be streamed instantly, but this would still allow for fully automated upload and subsequent processing of images taken by the drone. 
+
+ 
+SDK exploration 
+timeline change 
+future steps 
 ## Existing App Evaluation / Magic Quadrant
-__Objective__: Find existing software / apps with the following capabilities:
+Given my first two days of drone exploration, I now focused my efforts on finding an existing mobile app providing functionality to:
 1. Automate flying missions
 2. Cache photos
-3. Enable triggering for FLY NOW feature
-+image quality/focusing 
-+image size, etc.
-+posting to SFTP (move these to the SDK section?)
+3. Enable scheduled and/or triggered missions 
 
-In software development, you want to first use existing libraries, pacakages, and apps because 
+You may ask why I did not immediately attempt to write my own mobile app to accomplish all of my required features. In software development, it is better practice to first use existing libraries and packages instead of writing your own custom solution. First, this can save significant time if you can simply plug in an existing app into your own custom architecture. Secondly, prebuilt libraries are usually better tested, having gone through multiple iterations before being shared for general use. 
+
+Hence, I wanted to exhaust existing solutions that could achieve the above three criteria, before considering alternate solutions (such as writing my own mobile application). 
+
 [//]: # (check spelling, cost, system availability)
 ### Dimensions:
 * Logistics: Cost, system availability (= color)
