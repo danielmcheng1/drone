@@ -10,7 +10,8 @@ _Date: 9/2/17 to 9/17/17_
 Architecture<br>
 ![Diagram of project architecture](writeup_images/drawio_architecture.JPG)
 
-## Project Raison D'Etre
+## Project Setup 
+### Raison D'Etre
 Drone adoption has rapidly grown over the last few years, from search-and-rescue missions and aerial surveyance prior to excavation, to automated package delivery and photo shoots for personal enjoyment. 
 
 This project prototypes a new application of drones as photo subscription service. The offered service falls into two categories of high-level user stories. 
@@ -27,39 +28,50 @@ __Analyzing historical images__<br>
 
 Hence, this drone service automates photo capture so that subscribers can easily count cars and people in real-time for any location of interest. 
 
-## Criteria for Sucess 
+### Requirements
 The above project objective can broken down into the following criteria for a minimum viable product.  
 
 _As a user of this drone service, I need to have the ability to:_
 1. Request a photo capture right NOW 
 2. Browse current AND historical images for my location of interest 
 
+### Initial Timeline
 To further breakdown the complexity of this project, I defined the following timeline for completing each project component. This prototype was completed in 16 days.
 
-//add timeline 
-* Day 1: Take one manual photo with a drone and display in real-time on website 
-* Day 2 - 3: Take five automated pictures along a predetermined flight route and display in real-time on website 
-* Day 4: Schedule drone to fly flight route every 15 minutes 
-* Day 5 - 6: Blend photos together and show animated gif over time 
-* Day 7: Request for drone to fly now based off of SMS trigger 
-* Day 8: Enable automated SMS updates and MMS photo sharing 
-* Day 9: Finalize website and optimize for mobile
+//add timeline  visual
+* Day 1: Setup drone and experiment with flight 
+* Day 2: Take one manual photo and display it in real-time on website 
+* Days 3 - 4: Take five automated pictures along a predetermined flight route 
+* Day 5: Schedule drone to fly flight route every 15 minutes 
+* Day 6 - 7: Blend photos together and show animated gif over time 
+* Day 8: Request for drone to fly now based off of SMS trigger 
+* Day 9: Enable automated SMS updates and MMS photo sharing 
 * Day 10: Automatically count cars in photos 
-* Day 11 - 12: Build system for multiple drones
-* 
+* Days 11 - 12: Finalize website and optimize for mobile
+* Days 13 - 14: Set up subscription service for paid members*
+* Day 15 - 16: Prototype system for multiple drones 
 
+_*Note: All of this was planned as a prototype for purely recreational purposes. Further development into a commercial product would require consideration of FAA regulations around drone flight.
 
-## User Story
-User Stories (Cohn) are a popular way to capture requirements used in Agile software development (Martin). These are a collection of features that need to be developed for the next iteration of the program. They are often phrased as a simple task that a certain user role needs the system needs to perform.
+### Anticipated Roadblocks 
+Having done initial research into consumer drone capabilities, I knew that it was possible to automate taking photos and flying predetermined flight routes. In my searches, I had found numerous drone apps that appeared to have these capabilities (discussed in further detail in the next section). Thus the work for days 1 through 4 seemed to merely be a matter of execution.
 
-The raison d’être for this program is to help new franchisees choose which store location to open their new store in from a given list of locations they are considering. The following requirements are the heart of the project.
+However, I had found no examples of consumers apps allowing for scheduled or triggered missions. I suspected there were potential safety concerns--as well as less demand for this in the hobbyist market (i.e. unless you are flying drones commercially, it seems unlikely that you would need to have fully automated scheduled drone flights). 
 
-As a new business owner:
+If by Day 5 in my timeline, I indeed could not find an existing product for scheduling drone flight, I had two alternate plans:
+1. Build a customized app using [DJI's mobile SDK] (https://developer.dji.com/mobile-sdk/)
+2. Plan for having a manual release of the drone by a human worker. No matter how automated, this drone service would likely need some human intervention to maintain
 
-I want a metric for my prospective rental location indicating its desirability.
+## Drone Setup 
+![Litchi landing screen](writeup_images/mavicpro1.png)
+_Justification for DJI Drone_
+I chose to use the DJI Mavic Pro for this project for two reasons. First, DJI is the clear leader in the consumer drone space, owning perhaps [50% of the North American market] (https://www.recode.net/2017/4/14/14690576/drone-market-share-growth-charts-dji-forecast). My project was focused on software rather than hardware--so I wanted to pick the most reliable hardware available, thus avoiding having to troubleshoot flight control or camera issues.
 
-## Initial Timeline / Sprint Plan
-initial take photo and save to site
+Secondly, DJI offer [programmatic control] (https://developer.dji.com/mobile-sdk/documentation/introduction/mobile_sdk_introduction.html) of its drones, opening up the possibility of advanced customized control over the drone's flight. 
+
+I specifically chose the Mavic Pro because of its popularity in taking high-quality aerial photography. It also automates many parts of drone piloting, from takeoff and landing to intelligent flight modes. Again, the focus of this project was on software and not hardware--hence I wanted to use a drone that would automate as much of the piloting experience as possible. 
+ 
+_Initial Experimentation_ 
 
 ## Existing App Evaluation / Magic Quadrant
 __Objective__: Find existing software / apps with the following capabilities:
@@ -70,6 +82,7 @@ __Objective__: Find existing software / apps with the following capabilities:
 +image size, etc.
 +posting to SFTP (move these to the SDK section?)
 
+In software development, you want to first use existing libraries, pacakages, and apps because 
 [//]: # (check spelling, cost, system availability)
 ### Dimensions:
 * Logistics: Cost, system availability (= color)
