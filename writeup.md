@@ -29,20 +29,20 @@ This project prototypes a new application of drones as photo subscription servic
 __Request a photo now__<br> 
 * As a city worker, I want to know how many street parking spots areo open so that I can park in the closest spot to my office
 * As a commuter, I want to now how long the line is at my local carpooling stop so that I can decide whether to leave now 
-* As a busy young working professional, I want to know how long the line is at my favorite restaurant so that I can avoid standing in a long line 
+* As a young working professional, I want to know how long the line is at my favorite restaurant so that I can avoid standing in a long line 
 
 __Analyzing historical images__<br>
 * As a city engineer, I want to know the daily usage of parking spots so that I can analyze the effect of increasing or decreasing free parking spots 
 * As a marketer, I want to understand the demographic distribution of shoppers at IKEA so that I can design more targeted advertisements
 [//]: # ( * As a real estate investor, I want to survey properties so that I can evaluate the value of my potential investment)
 
-Hence, this drone service automates photo capture so that subscribers can easily count cars and people in real-time for any location of interest. 
+Hence, this drone service automates photo capture so that subscribers can easily count cars and people in real-time for any location of interest. The above stories were merely a sampling of possible applications--you can easily envision many other situations that would benefit from this drone service.
 
 ### Requirements
-The above project objective can broken down into the following criteria for a minimum viable product.  
+The above user stories can broken down into the following criteria for a minimum viable product.  
 
-_As a user of this drone service, I need to have the ability to:_
-1. Request a photo capture right NOW 
+As a user of this drone service, I want to have the ability to:
+1. Request a photo capture right now
 2. Browse current AND historical images for my location of interest 
 
 ### Initial Timeline
@@ -50,19 +50,7 @@ To further breakdown the complexity of this project, I defined the following tim
 
 ![Project Timeline](writeup_images/timeline1.png)
 
-* Day 1: Experiment with basic drone flight 
-* Day 2: Take one manual photo and display in real-time on website 
-* Days 3 - 4: Take five automated pictures along a predetermined flight route 
-* Day 5: Schedule drone to fly flight route every 15 minutes 
-* Day 6 - 7: Blend photos together and show animated gif over time 
-* Day 8: Request for drone to fly now based off of SMS trigger 
-* Day 9: Enable automated SMS updates and MMS photo sharing 
-* Day 10: Automatically count cars in photos 
-* Days 11 - 12: Finalize website and optimize for mobile
-* Days 13 - 14: Set up subscription service for paid members
-* Days 15 - 16: Prototype system for multiple drones 
-
-_Note: All of this was planned as a prototype for purely recreational purposes. Further development into a commercial product would require consideration of FAA regulations around drone flight._
+_Note:_ All of this was planned as a prototype for purely recreational purposes. Further development into a commercial product would require consideration of FAA regulations around drone flight.
 
 ### Anticipated Roadblocks 
 Having done initial research into consumer drone capabilities, I knew that it was possible to automate taking photos and flying predetermined flight routes. In my searches, I had found numerous drone apps that appeared to have these capabilities (discussed in further detail in the next section). Thus the work for days 1 through 4 seemed to merely be a matter of execution.
@@ -70,34 +58,36 @@ Having done initial research into consumer drone capabilities, I knew that it wa
 However, I had found no examples of consumers apps allowing for scheduled or triggered missions. I suspected there were potential safety concerns--as well as less demand for this in the hobbyist market (i.e. unless you are flying drones commercially, it seems unlikely that you would need to have fully automated scheduled drone flights). 
 
 If by Day 5 in my timeline, I indeed could not find an existing product for scheduling drone flight, I had two alternate plans:
-1. Build a customized app using [DJI's mobile SDK] (https://developer.dji.com/mobile-sdk/)
+1. Build a customized app using [DJI's mobile SDK](https://developer.dji.com/mobile-sdk/)
 2. Plan for having a manual release of the drone by a human worker. No matter how automated, this drone service would likely need some human intervention to maintain
 
 ## 2. Evaluation of Existing Tools 
-### Justification for DJI Drone
-![Mavic Pro](writeup_images/mavicpro1.png)
-I chose to use the DJI Mavic Pro for this project for two reasons. First, DJI is the clear leader in the consumer drone space, owning perhaps [50% of the North American market] (https://www.recode.net/2017/4/14/14690576/drone-market-share-growth-charts-dji-forecast). My project was focused on software rather than hardware--so I wanted to pick the most reliable hardware available, thus avoiding having to troubleshoot flight control or camera issues.
+### Hardware Justification
+For this project, I chose to use a DJI drone for two reasons. First, DJI is the clear leader in the consumer drone space, owning perhaps [50% of the North American market](https://www.recode.net/2017/4/14/14690576/drone-market-share-growth-charts-dji-forecast). My project was focused on software rather than hardware--so I wanted to pick the most reliable hardware available, thus avoiding having to troubleshoot flight control or camera issues.
 
-Secondly, DJI offer [programmatic control] (https://developer.dji.com/mobile-sdk/documentation/introduction/mobile_sdk_introduction.html) of its drones, opening up the possibility of advanced customized control over the drone's flight. 
+Secondly, DJI offer [programmatic control](https://developer.dji.com/mobile-sdk/documentation/introduction/mobile_sdk_introduction.html) of its drones, opening up the possibility of advanced customized control over the drone's flight. 
 
-I specifically chose the Mavic Pro because of its popularity in taking high-quality aerial photography. It also automates many parts of drone piloting, from takeoff and landing to intelligent flight modes. Again, the focus of this project was on software and not hardware--hence I wanted to use a drone that would automate as much of the piloting experience as possible. 
+Among the DJI drones, I selected the Mavic Pro because of its popularity in taking high-quality aerial photography. As a middle-tier drone, the Mavic Pro also automates many parts of drone piloting, from takeoff and landing to intelligent flight modes. Again, the focus of this project was on software and not on hardware--hence I wanted to select a drone that would automate as much of the piloting experience as possible. 
 
-_Side note on basic hardware terminology_: You control the drone aircraft using a remote controller, which transmits commands at 2.4 to 2.483 GHz. You can also connect your phone to the remote controller, allowing you to not only issue commands directly from an app, but to also view a live camera feed of the drone's point of view.
-![Mavic Pro Remote Controller](writeup_images/mavicprocontroller.png)
+<img src="writeup_images/mavicpro1.png" width="50%" alt="Mavic Pro"/>
+<img src="writeup_images/mavicprocontroller.png" width="40%" alt="Mavic Pro Remote Controller"/>
+<br>
 
-### Photo Caching
-For the first two days, I experimented with the basics of flying a drone and taking photos. I first confirmed that the image quality was more than sufficient for my photo service (the photos came out as 12000 MP, a resolution far higher than most web browsers need for rendering). Secondly, I tested flying simple missions (i.e. automated flight) to better undersatnd how much of flight could be truly automated.
+_Note_: For those unfamiliar with drones, you control the drone aircraft (left image) using a remote controller (right image), which transmits commands at 2.4 to 2.483 GHz. You then connect your phone to the remote controller, allowing you to not only issue commands directly from an app, but to also view a live camera feed of the drone's point of view.
 
-During this phase, I ran into a roadblock with displaying the drone image in real-time on a website. When a photo is captured, the drone (by default) only stores the images on the SD card loaded on the physicial aircraft. I needed some way of automatically transferring those photos from the aircraft to my mobile device--so that I could then immediately push those photos to my web server. Otherwise, the images would remain stuck on the aircraft until it landed. Furthermore, this image transfer had to occur programmatically--I wanted to avoid having to manually transfer files from the SD card. Manual transfer would also make it difficult to automate scheduling and triggering. 
+### Downloading Photos
+For the first two days, I experimented with the basics of flying a drone and taking photos. I first confirmed that the image quality was more than sufficient for my photo service (the photos came out as 12000 MP, a resolution far higher than most web browsers need for rendering). Secondly, I tested flying simple automated flights ("missions").
 
-To deliver on this feature, I had to find a software app that could reliably download or cache all images captured during a flight to local storage. Photos could then be pushed (using an app like [BotSync] (https://play.google.com/store/apps/details?id=com.botsync)) to the EC2 hosting my web server. 
+During this phase, I ran into a roadblock with displaying the drone image in real-time on a website. When a photo is captured, the drone only stores the images on the SD card loaded on the physicial aircraft. However, I needed to download those photos from the aircraft to my mobile device--so that I could then immediately push those photos to my web server. Otherwise, the images would remain stuck on the aircraft until it landed. Furthermore, this image download had to occur programmatically, so that scheduled and triggered flights could push images automatically without any human intervention.
 
-Should this prove impossible, I had a backup plan to install an Eyefi card on the aircarft--so that at the very least, images could automatically transmit once the drone landed in the wifi area. In this case, photos could not be streamed instantly, but this would still allow for fully automated upload and subsequent processing of images taken by the drone. 
+Hence, to deliver on this feature, I sought out a DJI mobile app that could reliably download all images captured during a flight to local phone storage. Photos could then be pushed (using an app like [BotSync] (https://play.google.com/store/apps/details?id=com.botsync)) to the EC2 hosting my web server. 
+
+Should this prove impossible, I had a backup plan to install an Eyefi card on the aircraft--so that at the very least, images could automatically transmit once the drone landed in the wifi area. This would incur a slight delay in streaming to the website, but this would still allow for fully automated upload of images without human intervention.
  
 ### Comparison of Drone Apps 
 Given my first two days of drone exploration, I now focused my efforts on finding an existing mobile app providing functionality to:
-1. Take photos while flying a preset flight path
-2. Cache photos
+1. Take photos while automatically flying a preset flight path (mission)
+2. Download photos to phone
 3. Schedule and/or trigger missions 
 
 You may ask why I did not immediately attempt to write my own mobile app to accomplish all of my required features. In software development, it is better practice to first use existing libraries and packages instead of writing your own custom solution. First, this can save significant time if you can simply plug in an existing app into your own custom architecture. Secondly, prebuilt libraries are usually better tested, having gone through multiple iterations before being shared for general use. 
@@ -107,18 +97,20 @@ Hence, I wanted to exhaust existing solutions that could achieve the above three
 [//]: # (check spelling, cost, system availability)
 
 #### Native DJI GO App
-![DJI Go App](writeup_images/djigoapp1.png)
+<img src="writeup_images/djigoapp1.png" width="65%" alt="DJI Go App"/>
 
-When flying the drone for the first time, DJI recommends using its [DJI GO App] (https://www.dji.com/goapp). This app runs comprehensive startup validation (e.g. compass calibrated, GPS connected), then offers a full suite of in flight controls, including:
+DJI provides its own [DJI GO App](https://www.dji.com/goapp) when flying its drones. This app runs comprehensive startup validation (e.g. compass calibrated, GPS connected), then offers a full suite of in-flight controls, including:
 * Single shot, timed shot, and video capture 
 * Camera tuning (adjusting focus, exposure, and orientation) 
-* Photo caching (save photos to phone storage) 
+* Photo caching (download photos to phone storage) 
 * Waypoint missions (automatically flying the drone along a predetermined set of GPS coordinates)
 
-Thus the DJI GO App fulfilled criteria #2, but only partially achieved criteria #1. Although the app could automatically fly the drone along previously visited waypoints, it could not automate photo capture throughout the mission. As it turns out, the majority of other consumer apps allow for more advanced control over waypoint missions (criteria #2), but fail to allow for photo caching (criteria #1). The next section evaluates these feature tradeoffs amongst the most popular DJI drone apps. 
+Thus the DJI GO App fulfilled criteria #2 (download photos), but only partially achieved criteria #1 (automated mission). Although the app could automatically fly the drone along previously visited waypoints, it could not automate photo capture throughout the mission. 
 
-#### Hobbyist Apps for Recreation
-These apps target single user consumer flying drones primarily for personal recreation. 
+As it turns out, the majority of other consumer apps allow for more advanced control over waypoint missions (criteria #2), but fail to allow for photo downloading (criteria #1). The next section evaluates these feature tradeoffs amongst the most popular DJI drone apps. 
+
+#### Hobbyist Apps for Recreational Photography
+This first set of apps targets the drone enthusiast market who fly drones solely for personal recreation. 
 
 Their interface is very similar to the native DJI Go4 App (in essence they've provided an extra UI layer for further customization off of the DJI SDK). 
 purely for recreation. They enhance the Intelligent Flight modes in the app (such as Follow Me, Active Track, Waypoint Missions, Orbit, and Panorama). For example, for the waypoint missions, these apps allow you to mark destinations on a map, then convert these into a drone mission--unlike the DJI Go4 App which requires you to fly the drone through all these destinations before rerunning.
@@ -130,23 +122,24 @@ In increasing order of both cost and customizability:
 4. Autopilot
 
 _Airnest_<br>
-Airnest markets themselves as "simply and easy to use" with a "Photostop style" interface. For example, for waypoint missions, the app allows users to simply "paint a line" on a map, and the app converts that into mission instructions for the drone.
+<img src="writeup_images/airnest.png" width="65%" alt="Airnest App"/>
+[Airnest](http://www.airnest.com/) markets themselves as simply and easy to use with a "Photostop style" interface. For example, for waypoint missions, the app allows users to simply "paint a line" on a map, and the app converts that into mission instructions for the drone.
 
-In my user tests, the app unfortunately failed to live up to its promise of being extraordinarily simple and easy to use. Missions could indeed be drawn with the flick of a finger, but editing those missions proved nearly impossible. For example, when I attempted to move the auto generated waypoint, I could literally find only one exact pixel spot where the app would respond to my touch.
+In my user tests, the app unfortunately failed to live up to its promise of being extraordinarily simple and easy to use. Missions could indeed be drawn with the flick of a finger, but editing those missions proved nearly impossible. For example, when I attempted adjust the auto-generated waypoint, I could find only one exact pixel spot where the app would respond to my touch.
 
-However, Airnest is free to use and functions as a convenient starter entry app for those wishing for a more flexible mission automation tool.
+Airnest does offer other features for more serious drone enthusiasts, such as flight logging, playback, and health metrics. As a free app, Airnest provides perhaps the best value for a drone hobbyist wishing for customization beyond the native DJI Go App. 
 
 _DJI Ultimate Flight and Litchi_<br>
-These next two apps offer very similar features, with DJI Ultimate Flight coming in at $20, and Litchi at $20-25 depending on the system. Litchi is by far the most popular hobbyist drone app when browsing forums and drone enthusiast sites, and for good reason. 
+These next two apps offer very similar features, with [DJI Ultimate Flight](http://djiultimateflight.com/) coming in at $20, and [Litchi](https://flylitchi.com/) at $23-25 depending on the system. These two are the most popular DJI drone apps mentioned in drone enthusiast forums and sites.
 
-Both apps have very similar layouts to the DJI Go4 App, with a first-person video stream in front, camera options on the side, and toggling options for camera settings, waypoint behavior, etc.
-![Litchi landing screen](writeup_images/litchi_landingscreen.JPG)
+Both apps have very similar layouts to the DJI Go4 App, with a first-person video stream in front, camera options on the side, and toggle menus for capture settings, waypoint behavior, etc.
 
+<img src="writeup_images/djiultimateflight.png" width="60%" alt="DJI Ultimate Flight App"/>
 
-Litchi allows users to create far more customized automated missions than would be possible in the native DJI app. This includes:
+With these apps, users can create far more customized automated missions than would be possible in the native DJI app. This includes:
 * Taking pictures (single shot and timed shot) at a waypoint
 * Recording video at a waypoint
-* Rotating the gimbal to focus on a point of interest 
+* Rotating the camera to focus on a point of interest 
 * Pausing and hovering at a waypoint
 
 All of these actions are programmatically tied to a waypoint, and a series of waypoints are then joined to together to run as an automated mission. Users simply tap to create a waypoint, then tap again to toggle the various actions for each waypoint. The series of waypoints are then uploaded as a missiont to the drone. All that's left is to hit "Run Mission" and the app will fly the drone from start to finish!
@@ -164,24 +157,25 @@ This is the most advanced hobbyist app on the market. Users can precisely contro
 The priciest of all these  apps ($29.95), Autopilot is ideally suited for those who need advanced automated flight control beyond what Litchi and DJI Ultimate Flight can offer. The learning curve is steeper due to the increased complexity offered for mission planning.
 
 
-#### Enterprise Apps for Surveyance
+#### Industrial Apps for Surveying and Mapping
+This second set of apps target professional or enterprise customers who fly drones to survey and map landscapes.
 These apps diverge from the native DJI UI--while they do provide flight automation, the app itself is a tool, a means towards an end. 
 That end is photogrammetry--generating a high-resolution or even 3D model via scores and hundreds of drone pictures. Hence these apps tend to target professional or enterprise customers who are willing to pay more for the photo editing tool on the backend. And who need an app that will fly hundreds of missions over a large area.
 <br>
 Again, in increasing order of complexity and cost:
-1. Flying Precision
+1. PrecisionFlight
 2. Pix4D
 3. Drone Deploy
 
-_Flying Precision_<br>
-Deployed by Precision Hawk, this free app offers a very simple front-end interface. Simply touch and drag to mark the survey area on the map, the app will automatically generate a waypoint mission to fly. There are no additional capabilities for customizing camera focus or gimbal rotation--the app simply flies the drone over the desired area and automatically captures however images are needed for generating a detailed high-resolution image of the area.
+__PrecisionFlight__<br>
+Deployed by PrecisionHawk, this free [PrecisionFlight app](http://www.precisionhawk.com/precisionflight) offers a straightforward front-end interface. Simply touch and drag to mark the survey area on the map, the app will automatically generate a waypoint mission to fly. There are no additional capabilities for customizing camera focus or gimbal rotation--the app simply flies the drone over the desired area and automatically captures however images are needed for generating a detailed high-resolution image of the area.
 
 _Pix4D_<br>
 Another free app, Pix4D offers more customization than Flying Precision. For example, several different missions can be flown, including grid, criss cross, orbit, and panorama.
 
 [//]: # (screenshot)
 
-Users can also customize the angle of the gimbal and the rate of capture. Missions can be grouped into higher level "projects", and all photos are locally cached to corresponding subfolders within the phone's internal storage. 
+Users can also customize the angle of the gimbal and the rate of capture. Missions can be grouped into higher level "projects", and all photos are downloaded to corresponding subfolders within the phone's internal storage. 
 
 Everything in the app is geared towards the post-processing "photogrammetry" stage. Upon photo download, all images can be automatically uploaded to Pix4D cloud servers, which are then stitched together to construct a 3D model of the surveyed landscape.
 
@@ -199,7 +193,7 @@ Other touted features include:
 ### Justification/Result of App Evaluation 
 None of the existing app could fulfill the minimum criteria necessary for this drone product.
 
-Litchi came closest with its mission planning interface and automated flights, but failed to offer photo caching--essential for immediate display of images on the web service.
+Litchi came closest with its mission planning interface and automated flights, but failed to offer photo downloading during missions--essential for immediate display of images on the web service.
 
 Pix4D was a close second since it automatically streamed images to the phone upon completion of the mission, but its mission planning was quite rigid. Because the app functioned as a means towards surveying a region, the quality and rate of image capture was automated and locked away in a black box--hence you had no ability to customize taking pictures at different angles and speeds. 
 
@@ -213,7 +207,7 @@ Developing a full-fledge app similar to Litchi would take far longer than a few 
 
 _Rebuilding Features Available in Existing Apps_<br>
 * __Mission Automation__: One button to take off from ground, fly to waypoints, take photos, and land 
-* __Photo Caching__: Photos should automatically be saved on phone internal storage 
+* __Photo Download__: Photos should automatically be downloaded to the phone's internal storage 
 * __Image Quality__: Camera should auto focus and expose throughout to avoid blurriness and low-resolution images  
 
 _Adding New Features_<br> 
@@ -229,7 +223,7 @@ Before jumping into coding all of these functions, I first determined whether th
 Feature | DJI SDK Class | DJI SDK Method
 ------- | --------- | ----------
 Mission Automation | MissionBuilder | addWaypoint, addAction, loadMission, startMission 
-Photo Caching | MediaManager | onNewFile, fetchFileData
+Photo Download | MediaManager | onNewFile, fetchFileData
 Image Quality | Camera | setFocusmode
 
 Feature | Android Package
@@ -260,7 +254,7 @@ Hence I chose to focus the majority of my remaining time on a custom app, becaus
 Finally, I also deprioritized writing code to automatically parse and count cars in these drone images. This was again a nice-to-have feature, but not strictly necessary. For example, users of this service could easily take a look at a photo of street parking and tell if any parking spots were open. Automatic object recognition was not strictly necessary for the success of this project prototype.  
 
 Hence my revised timeline was as follows: 
-* Days 7 - 9: Build Android app prototype with photo caching and automatic mission control 
+* Days 7 - 9: Build Android app prototype with photo download and automatic mission control 
 * Day 10: Add functionality to schedule missions 
 * Day 11: Add functionality to trigger missions 
 * Day 12: Troubleshoot and clean up app  
@@ -305,12 +299,12 @@ __Day 11__:
 <br>[x] Test complete execution of mission with automatic resize and upload to server 
  
 __Days 12 - 14__: 
-<br>[x] Troubleshoot multithreading / download bandwidth issues with caching photos 
+<br>[x] Troubleshoot multithreading / download bandwidth issues with downloading photos 
 
-As evident in the above timeline, I completed the app prototype within the expected timeframe of six days, but I ran into a major roadblock with caching photos that consumed nearly three full days. 
+As evident in the above timeline, I completed the app prototype within the expected timeframe of six days, but I ran into a major roadblock with downloading photos that consumed nearly three full days. 
 
 
-### Technical Challenges: Synchronization and Multithreading 
+### Technical Challenges: Synchronization and Multithreading for Photo Downloads
 _Debugging / Problem Scope_ 
 During my first code iteration, I automatically triggered file download to local phone storage. That is, whenever the DJI camera app generated a new file, it would automatically start downloading the file data:
 ```java 
@@ -435,7 +429,7 @@ mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExt
 * Live video feed
 
 ## 4. Flask Web Service
-After troubleshooting the photo caching issue described above, I had 1.5 days remaining to build the front-end web service in Flask. Given the tight timeline, I again winnowed down to the following  minimum criteria for completion. Note that this lists excludes automatic parsing / counting of cars within the images--as discussed before, this was a useful but not necessary feature of my envisioned service, and hence I chose to drop this so that I could deliver on the below essential features. 
+After troubleshooting the photo downloading issue described above, I had 1.5 days remaining to build the front-end web service in Flask. Given the tight timeline, I again winnowed down to the following  minimum criteria for completion. Note that this lists excludes automatic parsing / counting of cars within the images--as discussed before, this was a useful but not necessary feature of my envisioned service, and hence I chose to drop this so that I could deliver on the below essential features. 
 * Automatic refresh of latest images from drone 
 * Fast historical image browsing 
 * Playback of historical images 
