@@ -26,7 +26,7 @@ Drone adoption has rapidly grown over the last few years, from search-and-rescue
 
 This project prototypes a new application of drones as photo subscription service. The offered service falls into two categories of high-level user stories. 
 
-__Requesting a photo NOW__<br> 
+__Request a photo now__<br> 
 * As a city worker, I want to know how many street parking spots areo open so that I can park in the closest spot to my office
 * As a commuter, I want to now how long the line is at my local carpooling stop so that I can decide whether to leave now 
 * As a busy young working professional, I want to know how long the line is at my favorite restaurant so that I can avoid standing in a long line 
@@ -46,11 +46,12 @@ _As a user of this drone service, I need to have the ability to:_
 2. Browse current AND historical images for my location of interest 
 
 ### Initial Timeline
-To further breakdown the complexity of this project, I defined the following timeline for completing each project component. This prototype was completed in 16 days.
+To further breakdown the complexity of this project, I defined the following timeline for completing each project component over the next 16 days.
 
-//add timeline  visual
-* Day 1: Setup drone and experiment with flight 
-* Day 2: Take one manual photo and display it in real-time on website 
+![Project Timeline](writeup_images/timeline1.png)
+
+* Day 1: Experiment with basic drone flight 
+* Day 2: Take one manual photo and display in real-time on website 
 * Days 3 - 4: Take five automated pictures along a predetermined flight route 
 * Day 5: Schedule drone to fly flight route every 15 minutes 
 * Day 6 - 7: Blend photos together and show animated gif over time 
@@ -58,10 +59,10 @@ To further breakdown the complexity of this project, I defined the following tim
 * Day 9: Enable automated SMS updates and MMS photo sharing 
 * Day 10: Automatically count cars in photos 
 * Days 11 - 12: Finalize website and optimize for mobile
-* Days 13 - 14: Set up subscription service for paid members*
-* Day 15 - 16: Prototype system for multiple drones 
+* Days 13 - 14: Set up subscription service for paid members
+* Days 15 - 16: Prototype system for multiple drones 
 
-_*Note: All of this was planned as a prototype for purely recreational purposes. Further development into a commercial product would require consideration of FAA regulations around drone flight.
+_Note: All of this was planned as a prototype for purely recreational purposes. Further development into a commercial product would require consideration of FAA regulations around drone flight._
 
 ### Anticipated Roadblocks 
 Having done initial research into consumer drone capabilities, I knew that it was possible to automate taking photos and flying predetermined flight routes. In my searches, I had found numerous drone apps that appeared to have these capabilities (discussed in further detail in the next section). Thus the work for days 1 through 4 seemed to merely be a matter of execution.
