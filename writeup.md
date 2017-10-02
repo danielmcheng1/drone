@@ -109,24 +109,23 @@ Thus the DJI GO App fulfills criteria #2 (download photos), but only partially a
 
 As it turns out, the majority of other consumer apps allow for more advanced control over waypoint missions (criteria #2), but fail to allow for photo downloading (criteria #1). The next section evaluates these feature tradeoffs amongst the most popular DJI drone apps. 
 
-#### Hobbyist Apps for Recreational Photography
-This first set of apps targets the drone enthusiast market who fly drones solely for personal recreation. 
-
-In increasing order of price:
+#### Category 1: Hobbyist Apps for Recreational Photography
+This first set of apps targets the drone enthusiast market who fly drones solely for personal recreation. In increasing order of price:
 1. Airnest 
 2. DJI Ultimate Flight
 3. Litchi
 4. Autopilot
 
-_Airnest_<br>
-<img src="writeup_images/airnest.png" width="65%" alt="Airnest App"/>
-[Airnest](http://www.airnest.com/) markets themselves as simply and easy to use with a "Photostop style" interface. For example, for waypoint missions, the app allows users to simply "paint a line" on a map, and the app converts that into mission instructions for the drone.
+<br>__Airnest__<br>
+The [Airnest app](http://www.airnest.com/) is marketed as simply and easy to use with a "Photostop style" interface. For example, for waypoint missions, the app allows users to simply "paint a line" on a map, and the app converts that into mission instructions for the drone.
+
+<img src="writeup_images/airnest.png" width="60%" alt="Airnest App"/><br>
 
 In my user tests, the app unfortunately failed to live up to its promise of being extraordinarily simple and easy to use. Missions could indeed be drawn with the flick of a finger, but editing those missions proved nearly impossible. For example, when I attempted adjust the auto-generated waypoint, I could find only one exact pixel spot where the app would respond to my touch.
 
 Airnest does offer other features for more serious drone enthusiasts, such as flight logging, playback, and health metrics. As a free app, Airnest provides perhaps the best value for a drone hobbyist wishing for customization beyond the native DJI Go App. 
 
-_DJI Ultimate Flight and Litchi_<br>
+<br>__DJI Ultimate Flight and Litchi__<br>
 These next two apps offer very similar features, with [DJI Ultimate Flight](http://djiultimateflight.com/) coming in at $20, and [Litchi](https://flylitchi.com/) at $23-25 depending on the system. These two are the most popular DJI drone apps mentioned in drone enthusiast forums and sites.
 
 The app layout mimics the DJI Go4 App, with a first-person video stream in front, camera options on the side, and toggle menus for capture settings, waypoint behavior, etc.
@@ -140,12 +139,14 @@ Users can create far more customized and automated missions than would be possib
 * Pausing and hovering at a waypoint
 
 Users simply tap on the map to create a waypoint, then add any of the above actions to that waypoint. A series of such waypoints are then uploaded as a mission to the drone. All that's left is to hit "Run Mission" and the app will fly the drone from start to finish!
+
 <img src="writeup_images/litchi_missionscreen.JPG" width="60%" alt="Litchi Mission"/>
 
 Hence, DJI Ultimate Flight and Litchi fulfill criteria #2 (automated mission with photos). However, these apps fail to meet criteria #1 (download pictures automatically). Litchi does offer photo caching on iOS, but this feature is not avialable during waypoint missions.
 
- For example, for the waypoint missions, these apps allow you to mark destinations on a map, then convert these into a drone mission--unlike the DJI Go4 App which requires you to fly the drone through all these destinations before rerunning.
-_Autopilot_<br>
+For example, for the waypoint missions, these apps allow you to mark destinations on a map, then convert these into a drone mission--unlike the DJI Go4 App which requires you to fly the drone through all these destinations before rerunning.
+
+<br>__Autopilot__<br>
 [Autopilot](https://autoflight.hangar.com/) is by far the most advanced hobbyist app on the market. Users can precisely control every aspect of automated drone flight, from the exact camera angle and focus to the curvature and descent of flight between waypoints. Autopilot also offers tracking of other drones within the area, on top of flight recording and logging.
 
 <img src="writeup_images/autopilot.png" width="65%" alt="Autopilot"/>
@@ -153,20 +154,19 @@ The priciest of all these apps ($29.99), Autopilot is ideally suited for those w
 
 Despite its advanced features, Autopilot does not offer automatic photo download either during waypoint missions, hence failing criteria #2.
 
-#### Commercial Apps for Surveying and Mapping
-This second set of apps targets professional or enterprise customers who fly drones to survey and map landscapes. These apps enable users to automate flight paths for large areas of land: Mark a rectangular grid on the map, and the app will automatically calculate the path, speed, and frequency of photo capture. Thus, instead of allowing users to customize every point along the mission, these apps determine the optimal path so that the resulting photos can be used to generate high-resolution stitched images and 3D models of the landscape. 
+#### Category 2: Commercial Apps for Surveying and Mapping
+This second set of apps targets professional or enterprise customers who fly drones to survey and map landscapes. These apps enable users to automate flight paths for large areas of land: Mark a rectangular grid on the map, and the app will automatically calculate the path, speed, and frequency of photo capture.
 
-<br>
-In increasing order of cost:
+Thus, instead of allowing users to customize every point along the mission, these apps determine the optimal path so that the resulting photos can be used to generate high-resolution stitched images and 3D models of the landscape. In increasing order of cost:
 1. PrecisionFlight
-2. Pix4D
-3. Drone Deploy
+2. Pix4Dcapture
+3. DroneDeploy
 
-__PrecisionFlight__<br>
+<br>__PrecisionFlight__<br>
 Deployed by PrecisionHawk, this free [PrecisionFlight app](http://www.precisionhawk.com/precisionflight) is straightforward to use: Simply touch and drag to mark the survey area on the map, then the app will automatically generate a waypoint mission to fly. There are no additional capabilities for customizing camera focus or gimbal rotation--the app simply flies the drone over the desired area and captures the images required to generate a high-resolution image of the area.
 <img src="writeup_images/precisionflight.png" width="65%" alt="PrecisionFlight"/>
 
-_Pix4Dcapture_<br>
+<br>__Pix4Dcapture__<br>
 Another free app, [Pix4Dcapture](https://pix4d.com/product/pix4dcapture/), offers more control over missions than FlyingPrecision does. Upon opening the app, users select from various mission layouts to suit their surveying needs.
 <img src="writeup_images/pix4dcapture.png" width="65%" alt="Pix4Dcapture"/>
 
@@ -175,8 +175,7 @@ As evident in the above screenshot, everything in the app is geared towards the 
 
 Among the apps I surveyed, Pix4D was the only one that offered complete functional photo caching on both Android and iOS. Upon mission completion, all photos are streamed to the corresponding mission folder on internal storage, before being uploaded to Pix4D cloud for 3D modeling.
 
-
-_DroneDeploy_<br>
+<br>__DroneDeploy__<br>
 The [DroneDeploy](https://www.dronedeploy.com/app.html) app lands users on a demo mission showcasing the app's ability to map a large Midwest farm. Offering a free Explorer tier followed by a $99 per month Pro tier, DroneDeploy offers the most advanced mapping features of all apps considered. This includes automatic area and volume measurements, NDVI calculations, and 3D exports. 
 
 <img src="writeup_images/dronedeploy.png" width="65%" alt="DroneDeploy"/>
@@ -192,7 +191,7 @@ Pix4D was a close second since it automatically downloaded images to the phone u
 
 Finally, none of the apps offered a way to schedule or trigger a mission (through a medium like SMS). Ultimately, you would still have to manually press a button to start the mission.
 
-__Hence, I needed to quickly pivot from my original development plan and build my own Android app to fulfill the project requirements.__ 
+__***Hence, I now had to rapidly pivot from my original development plan and build my own Android app to fulfill the project requirements.***__ 
 
 ## 3. Android App Development
 ### Minimum Requirements for App
