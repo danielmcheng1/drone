@@ -67,7 +67,7 @@ For this project, I chose to use a DJI drone for two reasons. First, DJI is the 
 
 Secondly, DJI offer [programmatic control](https://developer.dji.com/mobile-sdk/documentation/introduction/mobile_sdk_introduction.html) of its drones, opening up the possibility of advanced customized control over the drone's flight. 
 
-Among the DJI drones, I selected the Mavic Pro because of its popularity in taking high-quality aerial photography. As a middle-tier drone, the Mavic Pro also automates many parts of drone piloting, from takeoff and landing to intelligent flight modes. Again, the focus of this project was on software and not on hardware--hence I wanted to select a drone that would automate as much of the piloting experience as possible. 
+Among the DJI drones, I selected the Mavic Pro because of its popularity in taking high-quality aerial photography. As a middle-tier drone, the Mavic Pro also automates many parts of drone piloting, from takeoff and landing to obstacle avoidance and intelligent flight modes. Again, the focus of this project was on software and not on hardware--hence I wanted to select a drone that would automate as much of the piloting experience as possible. 
 
 <img src="writeup_images/mavicpro1.png" width="50%" alt="Mavic Pro"/>
 <img src="writeup_images/mavicprocontroller.png" width="40%" alt="Mavic Pro Remote Controller"/>
@@ -150,6 +150,7 @@ For example, for the waypoint missions, these apps allow you to mark destination
 [Autopilot](https://autoflight.hangar.com/) is by far the most advanced hobbyist app on the market. Users can precisely control every aspect of automated drone flight, from the exact camera angle and focus to the curvature and descent of flight between waypoints. Autopilot also offers tracking of other drones within the area, on top of flight recording and logging.
 
 <img src="writeup_images/autopilot.png" width="65%" alt="Autopilot"/>
+
 The priciest of all these apps ($29.99), Autopilot is ideally suited for those who need advanced automated flight control beyond what Litchi and DJI Ultimate Flight can offer. The learning curve is steeper due to the increased complexity offered for mission planning.
 
 Despite its advanced features, Autopilot does not offer automatic photo download either during waypoint missions, hence failing criteria #2.
@@ -195,22 +196,22 @@ __***Hence, I now had to rapidly pivot from my original development plan and bui
 
 ## 3. Android App Development
 ### Minimum Requirements for App
-Developing a full-fledge app similar to Litchi would take far longer than a few days, hence I had to identify the exact functions that my custom app would have to perform to complete the drone product. 
+Given the limited timeframe, I needed to carefully identify the exact requirements for my custom app. I was _not_ designing a user-facing app like Litchi, with a complete UI, product validation, forms for custom missions, and so on. Rather, I only had to build the following list of features: 
 
 _Rebuilding Features Available in Existing Apps_<br>
-* __Mission Automation__: One button to take off from ground, fly to waypoints, take photos, and land 
-* __Photo Download__: Photos should automatically be downloaded to the phone's internal storage 
-* __Image Quality__: Camera should auto focus and expose throughout to avoid blurriness and low-resolution images  
+* __Mission Automation__: Take off from ground, fly preset route while taking photos, then return home and land 
+* __Photo Download__: Photos should automatically download to the phone's internal storage 
+* __Image Quality__: Camera should auto focus throughout to ensure quality photos
 
 _Adding New Features_<br> 
-* Scheduled Missions
-* Triggered Missions
-* Photo Compression
-* Photo Transfer
+* __Scheduled Missions__: Schedule a mission to run every 5/10/15 minutes
+* __Triggered Missions__: Use SMS to trigger the mission
+* __Photo Transfer__: Push downloaded photos to EC2 server
+* __Photo Compression__: Reduce photo size from 5 MB to 0.5 MB to speed up transfer
 
 
-### Problem Search / Initial Exploration of SDK
-Before jumping into coding all of these functions, I first determined whether the existing mobile SDK could indeed achieve each of the minimum criteria listed above. Otherwise, an alternative to the SDK would have to be used should any of the above features seem infeasible during this exploration stage.
+### Problem Search: Evaluating the Mobile SDK
+Before jumping into coding all of these functions, I first identified how each requirement mapped to an existing class or method in the [DJI mobile SDK](https://developer.dji.com/mobile-sdk/documentation/introduction/index.html). For any software engineering project, it is a best practice to evaluate the feasibility of each component beforehand--instead of discovering halfway through the project that the most crucial part is not possible. 
 
 Feature | DJI SDK Class | DJI SDK Method
 ------- | --------- | ----------
@@ -225,27 +226,25 @@ Triggered Missions | BroadcastReceiver / SMS Manager
 Photo Compression | ImageUtil
 Photo Transfer| JSch
 
-During this phase, I also identified troubleshooting resources, such as the [DJI developer forum] (http://forum.dev.dji.com) and [DJI posts on Stack Overflow] (https://stackoverflow.com/questions/tagged/dji-sdk). I additionally contacted DJI support to validate that it feasible to take photos and save them to phone storage during waypoint mission flight.
+During this phase, I also reviewed the sample [DJI tutorials}(https://developer.dji.com/mobile-sdk/documentation/introduction/index.html), and identified troubleshooting resources, such as the [DJI developer forum] (http://forum.dev.dji.com) and [DJI posts on Stack Overflow] (https://stackoverflow.com/questions/tagged/dji-sdk). I additionally contacted DJI support to validate the most essential feature for my app (i.e. that photos could be automatically downloaded during mission execution).
 
 ### Revised Timeline 
 Once I determined that the DJI mobile SDK could implement all of my required features, I adjusted my initial timeline to account for the effort required to write an Android application. 
 
-At this point, six days had elapsed already. App development would take, at minimum, three days--and would likely take closer to five or six days. Hence I had to eliminate several features in my initial timeline, including:
+At this point, six days had elapsed already. Given that I had not worked with Android before, an initial prototype would take, at minimum, three days--and a would likely take closer to five or six days to iron out any bugs. Hence, to accommodate app development, I had to eliminate several features in my initial timeline, including:
 * Automated MMS photo sharing 
 * Setting up subscription service 
 * Prototyping system for multiple drones 
 
-These were features more conducive to a beta version of the app--but were clearly not necessary for the alpha version. Recall the minimum criteria for this drone service:
+These were nice-to-have features in a beta version of the app--but were not necessary for the alpha version. Recall the requirements for this drone service:
+> 1. Request a photo capture right now
+> 2. Browse current AND historical images for my location of interest 
 
-_As a user of this drone service, I need to have the ability to:_
-1. Request a photo capture right NOW 
-2. Browse current AND historical images for my location of interest 
-
-Hence I chose to focus the majority of my remaining time on a custom app, because this would allow me to fulfill the above two criteria. 
+Hence I chose to divert the majority of my remaining time into this custom Android app, to ensure I could achieve the above two criteria. 
 
 Finally, I also deprioritized writing code to automatically parse and count cars in these drone images. This was again a nice-to-have feature, but not strictly necessary. For example, users of this service could easily take a look at a photo of street parking and tell if any parking spots were open. Automatic object recognition was not strictly necessary for the success of this project prototype.  
 
-Hence my revised timeline was as follows: 
+Thus my revised timeline was as follows: 
 * Days 7 - 9: Build Android app prototype with photo download and automatic mission control 
 * Day 10: Add functionality to schedule missions 
 * Day 11: Add functionality to trigger missions 
@@ -419,6 +418,8 @@ mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExt
 * Custom exceptions
 * Waypoint mission flying
 * Live video feed
+
+// TBD: insert screenshot of app here 
 
 ## 4. Flask Web Service
 After troubleshooting the photo downloading issue described above, I had 1.5 days remaining to build the front-end web service in Flask. Given the tight timeline, I again winnowed down to the following  minimum criteria for completion. Note that this lists excludes automatic parsing / counting of cars within the images--as discussed before, this was a useful but not necessary feature of my envisioned service, and hence I chose to drop this so that I could deliver on the below essential features. 
