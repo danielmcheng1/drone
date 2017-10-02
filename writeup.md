@@ -105,17 +105,14 @@ DJI provides its own [DJI GO App](https://www.dji.com/goapp) when flying its dro
 * Photo caching (download photos to phone storage) 
 * Waypoint missions (automatically flying the drone along a predetermined set of GPS coordinates)
 
-Thus the DJI GO App fulfilled criteria #2 (download photos), but only partially achieved criteria #1 (automated mission). Although the app could automatically fly the drone along previously visited waypoints, it could not automate photo capture throughout the mission. 
+Thus the DJI GO App fulfills criteria #2 (download photos), but only partially achieves criteria #1 (automated mission). Although the app could automatically fly the drone along previously visited waypoints, it could not automate photo capture throughout the mission. 
 
 As it turns out, the majority of other consumer apps allow for more advanced control over waypoint missions (criteria #2), but fail to allow for photo downloading (criteria #1). The next section evaluates these feature tradeoffs amongst the most popular DJI drone apps. 
 
 #### Hobbyist Apps for Recreational Photography
 This first set of apps targets the drone enthusiast market who fly drones solely for personal recreation. 
 
-Their interface is very similar to the native DJI Go4 App (in essence they've provided an extra UI layer for further customization off of the DJI SDK). 
-purely for recreation. They enhance the Intelligent Flight modes in the app (such as Follow Me, Active Track, Waypoint Missions, Orbit, and Panorama). For example, for the waypoint missions, these apps allow you to mark destinations on a map, then convert these into a drone mission--unlike the DJI Go4 App which requires you to fly the drone through all these destinations before rerunning.
-
-In increasing order of both cost and customizability:
+In increasing order of price:
 1. Airnest 
 2. DJI Ultimate Flight
 3. Litchi
@@ -132,74 +129,70 @@ Airnest does offer other features for more serious drone enthusiasts, such as fl
 _DJI Ultimate Flight and Litchi_<br>
 These next two apps offer very similar features, with [DJI Ultimate Flight](http://djiultimateflight.com/) coming in at $20, and [Litchi](https://flylitchi.com/) at $23-25 depending on the system. These two are the most popular DJI drone apps mentioned in drone enthusiast forums and sites.
 
-Both apps have very similar layouts to the DJI Go4 App, with a first-person video stream in front, camera options on the side, and toggle menus for capture settings, waypoint behavior, etc.
+The app layout mimics the DJI Go4 App, with a first-person video stream in front, camera options on the side, and toggle menus for capture settings, waypoint behavior, etc.
 
 <img src="writeup_images/djiultimateflight.png" width="60%" alt="DJI Ultimate Flight App"/>
 
-With these apps, users can create far more customized automated missions than would be possible in the native DJI app. This includes:
+Users can create far more customized and automated missions than would be possible in the native DJI app. This includes:
 * Taking pictures (single shot and timed shot) at a waypoint
 * Recording video at a waypoint
 * Rotating the camera to focus on a point of interest 
 * Pausing and hovering at a waypoint
 
-All of these actions are programmatically tied to a waypoint, and a series of waypoints are then joined to together to run as an automated mission. Users simply tap to create a waypoint, then tap again to toggle the various actions for each waypoint. The series of waypoints are then uploaded as a missiont to the drone. All that's left is to hit "Run Mission" and the app will fly the drone from start to finish!
-![Litchi landing screen](writeup_images/litchi_missionscreen.JPG)
- 
+Users simply tap on the map to create a waypoint, then add any of the above actions to that waypoint. A series of such waypoints are then uploaded as a mission to the drone. All that's left is to hit "Run Mission" and the app will fly the drone from start to finish!
+<img src="writeup_images/litchi_missionscreen.JPG" width="60%" alt="Litchi Mission"/>
 
-A couple differentiating features between the two:
-Additional features
-* Litchi Mission Planning hub
-* DJI panoramas and orbits during waypoint missions 
+Hence, DJI Ultimate Flight and Litchi fulfill criteria #2 (automated mission with photos). However, these apps fail to meet criteria #1 (download pictures automatically). Litchi does offer photo caching on iOS, but this feature is not avialable during waypoint missions.
 
+ For example, for the waypoint missions, these apps allow you to mark destinations on a map, then convert these into a drone mission--unlike the DJI Go4 App which requires you to fly the drone through all these destinations before rerunning.
 _Autopilot_<br>
-This is the most advanced hobbyist app on the market. Users can precisely control every aspect of automated drone flight, from the exact camera angle and focus to the curvature and descent of flight between waypoints. 
+[Autopilot](https://autoflight.hangar.com/) is by far the most advanced hobbyist app on the market. Users can precisely control every aspect of automated drone flight, from the exact camera angle and focus to the curvature and descent of flight between waypoints. Autopilot also offers tracking of other drones within the area, on top of flight recording and logging.
 
-The priciest of all these  apps ($29.95), Autopilot is ideally suited for those who need advanced automated flight control beyond what Litchi and DJI Ultimate Flight can offer. The learning curve is steeper due to the increased complexity offered for mission planning.
+<img src="writeup_images/autopilot.png" width="65%" alt="Autopilot"/>
+The priciest of all these apps ($29.99), Autopilot is ideally suited for those who need advanced automated flight control beyond what Litchi and DJI Ultimate Flight can offer. The learning curve is steeper due to the increased complexity offered for mission planning.
 
+Despite its advanced features, Autopilot does not offer automatic photo download either during waypoint missions, hence failing criteria #2.
 
-#### Industrial Apps for Surveying and Mapping
-This second set of apps target professional or enterprise customers who fly drones to survey and map landscapes.
-These apps diverge from the native DJI UI--while they do provide flight automation, the app itself is a tool, a means towards an end. 
-That end is photogrammetry--generating a high-resolution or even 3D model via scores and hundreds of drone pictures. Hence these apps tend to target professional or enterprise customers who are willing to pay more for the photo editing tool on the backend. And who need an app that will fly hundreds of missions over a large area.
+#### Commercial Apps for Surveying and Mapping
+This second set of apps targets professional or enterprise customers who fly drones to survey and map landscapes. These apps enable users to automate flight paths for large areas of land: Mark a rectangular grid on the map, and the app will automatically calculate the path, speed, and frequency of photo capture. Thus, instead of allowing users to customize every point along the mission, these apps determine the optimal path so that the resulting photos can be used to generate high-resolution stitched images and 3D models of the landscape. 
+
 <br>
-Again, in increasing order of complexity and cost:
+In increasing order of cost:
 1. PrecisionFlight
 2. Pix4D
 3. Drone Deploy
 
 __PrecisionFlight__<br>
-Deployed by PrecisionHawk, this free [PrecisionFlight app](http://www.precisionhawk.com/precisionflight) offers a straightforward front-end interface. Simply touch and drag to mark the survey area on the map, the app will automatically generate a waypoint mission to fly. There are no additional capabilities for customizing camera focus or gimbal rotation--the app simply flies the drone over the desired area and automatically captures however images are needed for generating a detailed high-resolution image of the area.
+Deployed by PrecisionHawk, this free [PrecisionFlight app](http://www.precisionhawk.com/precisionflight) is straightforward to use: Simply touch and drag to mark the survey area on the map, then the app will automatically generate a waypoint mission to fly. There are no additional capabilities for customizing camera focus or gimbal rotation--the app simply flies the drone over the desired area and captures the images required to generate a high-resolution image of the area.
+<img src="writeup_images/precisionflight.png" width="65%" alt="PrecisionFlight"/>
 
-_Pix4D_<br>
-Another free app, Pix4D offers more customization than Flying Precision. For example, several different missions can be flown, including grid, criss cross, orbit, and panorama.
+_Pix4Dcapture_<br>
+Another free app, [Pix4Dcapture](https://pix4d.com/product/pix4dcapture/), offers more control over missions than FlyingPrecision does. Upon opening the app, users select from various mission layouts to suit their surveying needs.
+<img src="writeup_images/pix4dcapture.png" width="65%" alt="Pix4Dcapture"/>
 
-[//]: # (screenshot)
-
-Users can also customize the angle of the gimbal and the rate of capture. Missions can be grouped into higher level "projects", and all photos are downloaded to corresponding subfolders within the phone's internal storage. 
-
-Everything in the app is geared towards the post-processing "photogrammetry" stage. Upon photo download, all images can be automatically uploaded to Pix4D cloud servers, which are then stitched together to construct a 3D model of the surveyed landscape.
-
-In the words of one of the supported reps that I contacted regarding this app:
+As evident in the above screenshot, everything in the app is geared towards the post-processing stage, in which photos are transformed into 2D maps and 3D models. In the words of one of the supported reps that I contacted regarding this app:
 > Pix4Dcapture is a great flight planning app we provide free [but] you are free to use other applications if they better suit your needs. It is our Pix4Dmapper software that is the premier solution for photogrammetry, and as long as you are able to capture your images with the correct overlap and quality, you can process with Pix4Dmapper. 
 
-_Drone Deploy_<br>
-By far the most complex and costly of all three (coming in at $99 _per month(!)_), Drone Deploy clearly targets enterprise customers. Upon first opening the app, you're taken to a farming demo mission showcasing the app's ability to survey and model a large swatch of farmland in the Midwest.
-
-Other touted features include:
-* Analysis of # of batteries needed for flight
-* Automatic continuation of a mission should it be aborted midway through
+Among the apps I surveyed, Pix4D was the only one that offered complete functional photo caching on both Android and iOS. Upon mission completion, all photos are streamed to the corresponding mission folder on internal storage, before being uploaded to Pix4D cloud for 3D modeling.
 
 
-### Justification/Result of App Evaluation 
-None of the existing app could fulfill the minimum criteria necessary for this drone product.
+_DroneDeploy_<br>
+The [DroneDeploy](https://www.dronedeploy.com/app.html) app lands users on a demo mission showcasing the app's ability to map a large Midwest farm. Offering a free Explorer tier followed by a $99 per month Pro tier, DroneDeploy offers the most advanced mapping features of all apps considered. This includes automatic area and volume measurements, NDVI calculations, and 3D exports. 
 
-Litchi came closest with its mission planning interface and automated flights, but failed to offer photo downloading during missions--essential for immediate display of images on the web service.
+<img src="writeup_images/dronedeploy.png" width="65%" alt="DroneDeploy"/>
 
-Pix4D was a close second since it automatically streamed images to the phone upon completion of the mission, but its mission planning was quite rigid. Because the app functioned as a means towards surveying a region, the quality and rate of image capture was automated and locked away in a black box--hence you had no ability to customize taking pictures at different angles and speeds. 
+Although DroneDeploy offered perhaps the best mapping features on the app market, I ran into similar issues with photo caching, in which the app automatically generated hundreds for photos for a mission, but required manual extraction of images from the SD card in order to process. 
 
-Finally, none of the apps offered a way to automatically trigger a mission through a different medium (e.g. SMS). Ultimately you would still have to manually press a button to start the mission.
+### Conclusion of Drone App Evaluation 
+After thoroughly testing all of these drone apps, I concluded that no existing app could fulfill the minimum criteria necessary for my drone service.
 
-__Hence, I needed to pivot from my original development plan and build my own Android app to fulfill the project requirements.__ 
+Litchi came closest with its mission planning interface and automated flights, but failed to offer photo downloading during missions--essential for immediate streaming to my website. 
+
+Pix4D was a close second since it automatically downloaded images to the phone upon completion of the mission, but its mission planning was not flexible enough for my needs. Because the app was meant for surveying a region, the quality and rate of image capture was locked away in a black box--hence I had no ability to customize taking pictures at different angles and speeds. 
+
+Finally, none of the apps offered a way to schedule or trigger a mission (through a medium like SMS). Ultimately, you would still have to manually press a button to start the mission.
+
+__Hence, I needed to quickly pivot from my original development plan and build my own Android app to fulfill the project requirements.__ 
 
 ## 3. Android App Development
 ### Minimum Requirements for App
