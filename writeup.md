@@ -245,13 +245,8 @@ Hence I chose to divert the majority of my remaining time into this custom Andro
 Finally, I also deprioritized writing code to automatically parse and count cars in these drone images. This was again a nice-to-have feature, but not strictly necessary. For example, users of this service could easily take a look at a photo of street parking and tell if any parking spots were open. Automatic object recognition was not strictly necessary for the success of this project prototype.  
 
 Thus my revised timeline was as follows: 
-* Days 7 - 9: Build Android app prototype with photo download and automatic mission control 
-* Day 10: Add functionality to schedule missions 
-* Day 11: Add functionality to trigger missions 
-* Day 12: Troubleshoot and clean up app  
-* Day 13: Blend photos together and show animated gif over time 
-* Day 14 - 15: Finalize website and optimize for mobile
-* Day 16: Automatically count cars in photos 
+
+![Project Timeline](writeup_images/timeline2.png)
 
 ### Software Build 
 I chose Android as the development platform for two reasons:
