@@ -250,20 +250,20 @@ Thus my revised timeline was as follows:
 
 ### Software Build 
 I chose Android as the development platform for two reasons:
-1. __Existing hardware__: I had an Android phone readily available for installing and debugging 
-2. __Flexibility__: Android generally offers more developer control (e.g. I was more likely to be able to control and access where photos were stored locally)
+1. __Existing Hardware__: I had an Android phone readily available for installing and debugging 
+2. __Developer Control__: I valued Android having more flexibility than iOS (e.g. having more control to save photos in any folder of the file system, having the ability to publish app directly to the Marketplace)
 
-As I had no prior Android app development experience--and given the limited timeframe for project completion--I identified a [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) for connecting a custom mobile app to a DJI drone, then copied the [tutorial code](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time understanding how to setup product registration, drone connectivity, and basic live-camera streaming, I utilized the existing tutorial app and focused on building each of the minimum viable features listed up above.
+As I had no direct Android app development experience--and given the limited timeframe for project completion--I copied the existing codebase from DJI's [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) and basic [mission and camera tutorials](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time setting up product registration, drone connectivity, and live-camera streaming, I simply enhanced the existing tutorial to address my needs.
 
 Below is a breakdown of which app features were successfully completed by project day:<br>
 __Day 7__:
 <br>[x] Compile and run tutorials 
 <br>[x] Set up live video stream 
 <br>[x] Create button to take a photo during drone flight
-<br>[x] Troubleshoot Android permissions (requested at runtime instead of on installation for >= Marshmallow)
+<br>[x] Troubleshoot Android permissions (requested at runtime instead of on install for >= Marshmallow)
 
 __Day 8__:  
-<br>[x] Programmatically set autofocus 
+<br>[x] Set autofocus 
 <br>[x] Automatically take off
 <br>[x] Automatically land 
 <br>[x] Download photos to internal storage 
@@ -276,14 +276,14 @@ __Day 9__:
 __Day 10__:
 <br>[x] Test complete execution of mission with automatic timed shots 
 <br>[x] Create button to trigger mission every 5/10/15 minutes 
-<br>[x] Resize images from 5 MB to 0.2 MB 
-<br>[x] Post resized images to EC2 server backend 
+<br>[x] Create button to listen for SMS trigger kicking off mission 
 
 __Day 11__:
-<br>[x] Create button to listen for SMS trigger for kicking off mission 
-<br>[x] Automatically save photos in timestamped mission folder (locally and on server)
-<br>[x] Test complete execution of mission with automatic resize and upload to server 
- 
+<br>[x] Resize images from 5 MB to 0.2 MB 
+<br>[x] Post resized images to EC2 server backend 
+<br>[x] Save photos in timestamped mission folder (locally and on server)
+<br>[x] Test complete execution of mission 
+
 __Days 12 - 14__: 
 <br>[x] Troubleshoot multithreading / download bandwidth issues with downloading photos 
 
