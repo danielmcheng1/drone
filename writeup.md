@@ -292,7 +292,7 @@ As evident in the above timeline, I completed the app prototype within the expec
 
 
 ### Technical Challenges: Multithreading and Synchronization for Photo Downloads
-#### Debugging the Problem
+#### Debugging: Hypotheses 
 During my first code iteration, I used callbacks to automatically triggered photo download to local phone storage. That is, whenever the DJI camera app generated a new photo, it would automatically start downloading the photo:
 ```java 
 camera.setMediaFileCallback(new MediaFile.Callback() {
@@ -323,24 +323,27 @@ To test the first hypothesis, I replaced the individual callbacks with a batch d
 
 Hence, I moved onto the second hypothesis. When photo downloading failed, the logs from the download listener indicated that "the resource was too busy executing other commands." This indicated the following: Because photos were automatically downloading off of a callback--and because images were being shot every two seconds--all available bandwidth was consumed by the first 5 or 6 images, thus starving any new requests for downloading.
 
-I further validated this hypothesis based off similar problems encountered by a developer in the [DJI forum](http://forum.dev.dji.com). Furthermore, the DJI SDK offered a [task scheduler class](https://developer.dji.com/api-reference/android-api/Components/Camera/DJIMediaManager_FetchMediaTaskScheduler.html?) for fetching _previews_ of images--effectively implementing a queue to manage downloads one at a time. This again suggested that the full resolution photos had to be downloaded one at a time due to limited transmission bandwidth.
+I further validated this hypothesis based off similar problems encountered by a developer in the [DJI forum](http://forum.dev.dji.com). Furthermore, the DJI SDK offered a [task scheduler class](https://developer.dji.com/api-reference/android-api/Components/Camera/DJIMediaManager_FetchMediaTaskScheduler.html?) for fetching _previews_ of images--effectively implementing a queue to manage downloads one at a time. This again suggested that the _full resolution_ photos had to be downloaded one at a time due to limited transmission bandwidth.
 
-
-Researching the DJI developer forums, I found another developer whose photo downloads kept timing out. This developer concluded that multiple photo downloads had to be executed sequentially to avoid consuming all available download bandwidth. Looking through the logs for my testes, I suspected that this error happened only when flying outside--and not when flying virtually on the simulator--because flying outside imposed additional load to physically move and maintain the drone's flight. 
+The astute reader might question why this error happened only when flying outside--and not when flying virtually on the simulator. While testing the first hypothesis, I already validated that the _distance_ from controller to aircraft did not affect the download success rate. This indicated to me that a second issue might be at play.
 
 When building software projects, one typically executes tests in one of the three classes:
 1. __Fault Testing__: The program should correctly executes its intended function 
 2. __Stability Testing__: The program should reliably execute its function as frequently as possible (even if one or two cases fail)
 3. __Stress Testing__: The program should execute properly when scaled up to production level
 
-Hence my automatic photo download failed stress testing because the simulator environment did not fully capture the load during production (i.e. when flying outside). 
+It appeared that my automatic photo download failed stress testing because the simulator environment did not fully capture the load during production (i.e. when flying outside). Specifically: additional load came from the app directing the flight controller to physically move and maintain the drone's flight. This hypothesis was further supported by [CPU monitoring apps](https://play.google.com/store/apps/details?id=com.glgjing.stark&hl=en) which indicated high CPU usage when I flew my drone.
 
-_Solution_<br>
-To workaround the limited bandwidth for downloading media files using the DJI SDK, I applied two software techniques:
+Since the Android system can [pause or destroy app components](https://developer.android.com/topic/libraries/architecture/guide.html) to rebalance resources, I suspected that the total bandwidth was being constrained by my phone's operating system. Flying outside increased overall system load and triggered this system resource management--hence killing or reducing total resources available to the background thread responsible for downloading photos.
+
+#### Solution
+To properly manage the limited bandwidth for downloading media files using the DJI SDK, I applied two software techniques:
 1. Maintain a queue of downloads 
 2. Apply a mutex to prevent multithreaded callbacks  
 
-Implementing the queue was as simple as adding new files into an array list:
+Regarding resources being constrained by my phone's operating system, I force killed all other applications in my subsequent tests to minimize the chance of Android diverting resources from my app towards other apps. If this issue persisted, I planned to move my testing to an upgraded Android phone.
+
+For the remainder of this section, I will focus on how I implemented the queue and mutex. Implementing the queue was as simple as adding new files into an array list. This array list was an instance variable to allow for persistence across multiple file callbacks:
 ```java 
 camera.setMediaFileCallback(new MediaFile.Callback() {
     @Override
@@ -348,33 +351,42 @@ camera.setMediaFileCallback(new MediaFile.Callback() {
         addNewMediaFileToQueue(mediaFile);
     }
 }
+private void addNewMediaFileToQueue(MediaFile mediaFile) {
+    mMediaFilesToDownload.add(mediaFile);
+}
 ```
 
-However, simply dequeueing element by element and calling the download method failed due to multithreading.
+Queuing file was simple; but simply dequeueing element by element and calling the download method failed.
 ```java
 while(!mMediaFilesToDownload.isEmpty()) {
     MediaFile mediaFile = mMediaFilesToDownload.remove(mMediaFilesToDownload.size());
     downloadOneMediaFile(mediaFile, label);
 }
 ``` 
-Because array lists are not synchronized structures, multiple threads were popping off and attempting to download, which not only cause concurrent write conflicts, but also led to multiple downloads executing in parallel (which ultimately consumed all available download bandwidth).
+Because array lists are not synchronized structures, multiple threads were removing files from the queue, which not only cause concurrent write conflicts, but also resulted in multiple downloads executing in parallel. This defeated the goal of having sequential downloads in order to manage bandwidth.
 
-This was easily remedied by either (1) making the method synchronized, or (2) iterating without removing. 
+This was easily remedied by either (1) making the method synchronized, or (2) iterating over the array list without removing the files. 
 ```java
-while(!mMediaFilesToDownload.isEmpty()) {
-    MediaFile mediaFile = mMediaFilesToDownload.remove(mMediaFilesToDownload.size());
+int n = 0;
+while(true) {
+    // use break condition instead of embedding in while condition, 
+    // in case images are added to queue during loop iteration
+    if (n >= mMediaFilesToDownload.size())
+        break;
+    MediaFile mediaFile = mMediaFilesToDownload.get(n);
     // avoid repeated download if method is called again 
     if (!mMediaFileNamesDownloaded.contains(mediaFile.getFileName())) {
-        downloadOneMediaFile(mediaFile, label);
+        downloadOneMediaFile(mediaFile);
     }
+    n++;
 }
 ```
 
-However, this dequeueing approach still failed to prevent overloaded download bandwidth because the SDK download call was executed as a callback. Thus, even though files were dequeued sequentially, one at a time, the callbacks could end up executing simultaneously on the background thread.
+However, this dequeueing approach still failed to prevent overloaded download bandwidth because the SDK download was executed as a callback. Thus, even though files were dequeued sequentially, one at a time, the callbacks could end up executing simultaneously on the background thread.
 
 Hence, to solve this, I implemented a mutex so that only one file could be downloading at any given time. This guaranteed that even if multiple callbacks were triggered, only one file could download at once--hence ensuring sufficient download bandwidth.
 
-Note that although this solution executed more slowly than download multiple files in parallel, this solution was far more reliable--a more valuable feature in this case to ensure that all images would be loaded to the server.
+Note that although this solution executed more slowly than downloading multiple files in parallel, this solution was far more reliable--a far more valuable feature for my product, as I needed to guarantee successful load of all images to the server.
 
 ```java   
 mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExtension, new DownloadListener<String>() {
@@ -384,8 +396,11 @@ mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExt
     }
     public void onSuccess(String s) {
         try {
-            // resize image 
-            // SCP to EC2 server 
+            // resize image (abridged code shown below)
+            resizer.resize(mDownloadPath + "/" + subfolder + "/" + filename, mResizePath + "/" + subfolder);
+
+            // SCP to EC2 server (abridged code shown below)
+            scpCopyInBackground.execute(params);            
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -397,22 +412,6 @@ mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExt
     }
 }
 ```
-   
-### Other Technical Learnings 
-* Android Studio/Gradle
-* DJI Assistant/Simulator
-* ADB Logging Tools
-* Java Concepts
-   * Enums
-   * Builders 
-   * Callbacks
-   * Implementing and extending 
-   * Synchronizing / multithreading 
-* Android Concepts
-   * Android Life Cycle (onPause, onResume, onDestroy, etc.)
-   * Multithreading (UI thread, main thread, etc.)
-   * Broadcast receiver and intent filters
-   * Permissions 
    
 ### Final Architecture of Android App
 //replace with zoomed in view of diagram 
