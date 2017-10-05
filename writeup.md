@@ -2,12 +2,13 @@
 _Author: Daniel Cheng_<br>
 _Date: 9/2/17 to 9/17/17_
 
-This writeup documents the software development process for [numerate.io](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos), an automated drone photo service. I completed this prototype over the course of two weeks. The below analysis showcases three topics: 
+This writeup documents the software development process for [numerate.io](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos), an automated drone photo service that I built over the course of two weeks. The below analysis details three crucial skills for software project builds: 
 * __Project Planning__: Defining user requirements, adjusting timeline as challenges arise, completing MVP
 * __Technical Challenges__: Evaluating data structures, learning new tools, solving fundamental CS issues (e.g. multithreading)
 * __Software Architecture__: Interfacing with existing APIs, coordinating software components to meet user requirements
 
 [//]: # (include embedded page/screenshot) 
+[//]: # (link for dji developer with same issue, other download documentation links)
 
 ## Document Outline
 1. [Project Planning](#1-Project-Planning)
@@ -195,7 +196,7 @@ Finally, none of the apps offered a way to schedule or trigger a mission (throug
 __***Hence, I now had to rapidly pivot from my original development plan and build my own Android app to fulfill the project requirements.***__ 
 
 ## 3. Android App Development
-### Minimum Requirements for App
+### Minimum Requirements
 Given the limited timeframe, I needed to carefully identify the exact requirements for my custom app. I was _not_ designing a user-facing app like Litchi, with a complete UI, product validation, forms for custom missions, and so on. Rather, I only had to build the following list of features: 
 
 _Rebuilding Features Available in Existing Apps_<br>
@@ -210,7 +211,7 @@ _Adding New Features_<br>
 * __Photo Compression__: Reduce photo size from 5 MB to 0.5 MB to speed up transfer
 
 
-### Problem Search: Evaluating the Mobile SDK
+### Problem Scoping: Evaluating the Mobile SDK
 Before jumping into coding all of these functions, I first identified how each requirement mapped to an existing class or method in the [DJI mobile SDK](https://developer.dji.com/mobile-sdk/documentation/introduction/index.html). For any software engineering project, it is a best practice to evaluate the feasibility of each component beforehand--instead of discovering halfway through the project that the most crucial part is not possible. 
 
 Feature | DJI SDK Class | DJI SDK Method
@@ -226,7 +227,7 @@ Triggered Missions | BroadcastReceiver / SMS Manager
 Photo Compression | ImageUtil
 Photo Transfer| JSch
 
-During this phase, I also reviewed the sample [DJI tutorials}(https://developer.dji.com/mobile-sdk/documentation/introduction/index.html), and identified troubleshooting resources, such as the [DJI developer forum] (http://forum.dev.dji.com) and [DJI posts on Stack Overflow] (https://stackoverflow.com/questions/tagged/dji-sdk). I additionally contacted DJI support to validate the most essential feature for my app (i.e. that photos could be automatically downloaded during mission execution).
+During this phase, I reviewed the sample [DJI tutorials](https://developer.dji.com/mobile-sdk/documentation/introduction/index.html), then identified troubleshooting resources, such as the [DJI developer forum] (http://forum.dev.dji.com) and [DJI posts on Stack Overflow] (https://stackoverflow.com/questions/tagged/dji-sdk). I also contacted DJI support to validate the most essential feature for my app (i.e. that photos could be automatically downloaded during mission execution).
 
 ### Revised Timeline 
 Once I determined that the DJI mobile SDK could implement all of my required features, I adjusted my initial timeline to account for the effort required to write an Android application. 
@@ -253,7 +254,7 @@ I chose Android as the development platform for two reasons:
 1. __Existing Hardware__: I had an Android phone readily available for installing and debugging 
 2. __Developer Control__: I valued Android having more flexibility than iOS (e.g. having more control to save photos in any folder of the file system, having the ability to publish app directly to the Marketplace)
 
-As I had no direct Android app development experience--and given the limited timeframe for project completion--I copied the existing codebase from DJI's [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) and basic [mission and camera tutorials](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time setting up product registration, drone connectivity, and live-camera streaming, I simply enhanced the existing tutorial to address my needs.
+As I had no direct Android app development experience--and given the limited timeframe for project completion--I copied the existing codebase from DJI's [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) and [camera tutorial](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time setting up product registration, drone connectivity, and live-camera streaming, I simply enhanced the existing tutorial to address my needs.
 
 Below is a breakdown of which app features were successfully completed by project day:<br>
 __Day 7__:
@@ -263,7 +264,7 @@ __Day 7__:
 <br>[x] Troubleshoot Android permissions (requested at runtime instead of on install for >= Marshmallow)
 
 __Day 8__:  
-<br>[x] Set autofocus 
+<br>[x] Set optimal focus for photos
 <br>[x] Automatically take off
 <br>[x] Automatically land 
 <br>[x] Download photos to internal storage 
@@ -274,9 +275,9 @@ __Day 9__:
 <br>[x] Upload multiple waypoints as one mission to the flight controller 
 
 __Day 10__:
+<br>[x] Create timer to trigger mission every 5/10/15 minutes 
+<br>[x] Create broadcast receiver to listen for SMS trigger kicking off mission 
 <br>[x] Test complete execution of mission with automatic timed shots 
-<br>[x] Create button to trigger mission every 5/10/15 minutes 
-<br>[x] Create button to listen for SMS trigger kicking off mission 
 
 __Day 11__:
 <br>[x] Resize images from 5 MB to 0.2 MB 
@@ -285,14 +286,14 @@ __Day 11__:
 <br>[x] Test complete execution of mission 
 
 __Days 12 - 14__: 
-<br>[x] Troubleshoot multithreading / download bandwidth issues with downloading photos 
+<br>[x] Troubleshoot multithreading and bandwidth issues with downloading photos 
 
-As evident in the above timeline, I completed the app prototype within the expected timeframe of six days, but I ran into a major roadblock with downloading photos that consumed nearly three full days. 
+As evident in the above timeline, I completed the app prototype within the expected timeframe of five days, but I ran into an unexpected technical challenge with downloading photos that required several additional days to troubleshoot. 
 
 
-### Technical Challenges: Synchronization and Multithreading for Photo Downloads
-_Debugging / Problem Scope_ 
-During my first code iteration, I automatically triggered file download to local phone storage. That is, whenever the DJI camera app generated a new file, it would automatically start downloading the file data:
+### Technical Challenges: Multithreading and Synchronization for Photo Downloads
+#### Debugging the Problem
+During my first code iteration, I used callbacks to automatically triggered photo download to local phone storage. That is, whenever the DJI camera app generated a new photo, it would automatically start downloading the photo:
 ```java 
 camera.setMediaFileCallback(new MediaFile.Callback() {
     @Override
@@ -310,16 +311,24 @@ camera.setMediaFileCallback(new MediaFile.Callback() {
     }
 }
 ```
-This feature appeared to work perfectly when testing indoors in the DJI simulator (a virtual flight software allowing execution of missions on the computer). 10-20 photos would be captured and downloaded automatically throughout mission flight.
+I first tested this download feature on a DJI simulator, in which I connect the drone to my computer and fly virtual missions. This initial test showed that all 10-20 photos were captured and downloaded automatically throughout mission flight.
 
-However, upon running the exact same missions outside, only the first 5 or 6 images would download. The rest would raise a timeout error and block all subsequent downloads. I had two hypotheses for debugging this failure to download photos:
-* __Transmission Distance__: Failure due to increased radio distance transmission when flying outdoors
-* __Limited Bandwidth__: Failure due to limited CPU or bandwidth for downloading media files
- To test these hypotheses, I first ran a more extensive stress by trying to download all the photos at the end of the mission, when the drone was within a few feet of me. Despite this adjustment, I still ran into similar download issues. 
+However, upon testing the exact same missions outside, only the first 5 or 6 images would download. The rest would raise a timeout error and block all subsequent downloads.
 
-Moving onto the second hypothesis, I found supporting documentation in a DJI developer thread regarding timeout due to limited bandwidth. By downloading the data as soon as a new file was generated, I had consumed all the bandwidth by the time the mission had taken its 10th or 11th automatic photo. Furthermore, I did not consistently observe this error during simulator testing because the overall system load was lower; that is, when flying outside, the drone system had to allocate additional resources towards flight control, as opposed to merely simulating flight indoors. 
+I had two hypotheses for debugging this failure to download all photos:
+* __Transmission Distance__: Failure due to increased distance between controller and drone whenflying outdoors
+* __Limited Bandwidth__: Failure due to limited CPU or bandwidth for downloading photos
 
-In typical software development. one needs to execute three types of tests:
+To test the first hypothesis, I replaced the individual callbacks with a batch download of all images after the mission completed (hence the drone had returned to within a few feet of the controller). Yet despite this adjustment, I still ran into similar download issues.
+
+Hence, I moved onto the second hypothesis. When photo downloading failed, the logs from the download listener indicated that "the resource was too busy executing other commands." This indicated the following: Because photos were automatically downloading off of a callback--and because images were being shot every two seconds--all available bandwidth was consumed by the first 5 or 6 images, thus starving any new requests for downloading.
+
+I further validated this hypothesis based off similar problems encountered by a developer in the [DJI forum](http://forum.dev.dji.com). Furthermore, the DJI SDK offered a [task scheduler class](https://developer.dji.com/api-reference/android-api/Components/Camera/DJIMediaManager_FetchMediaTaskScheduler.html?) for fetching _previews_ of images--effectively implementing a queue to manage downloads one at a time. This again suggested that the full resolution photos had to be downloaded one at a time due to limited transmission bandwidth.
+
+
+Researching the DJI developer forums, I found another developer whose photo downloads kept timing out. This developer concluded that multiple photo downloads had to be executed sequentially to avoid consuming all available download bandwidth. Looking through the logs for my testes, I suspected that this error happened only when flying outside--and not when flying virtually on the simulator--because flying outside imposed additional load to physically move and maintain the drone's flight. 
+
+When building software projects, one typically executes tests in one of the three classes:
 1. __Fault Testing__: The program should correctly executes its intended function 
 2. __Stability Testing__: The program should reliably execute its function as frequently as possible (even if one or two cases fail)
 3. __Stress Testing__: The program should execute properly when scaled up to production level
@@ -361,7 +370,7 @@ while(!mMediaFilesToDownload.isEmpty()) {
 }
 ```
 
-However, this dequeueing approach still failed to prevent overloaded download bandwith because the SDK download call was executed as a callback. Thus, even though files were dequeued sequentially, one at a time, the callbacks could end up executing simultaneously on the background thread.
+However, this dequeueing approach still failed to prevent overloaded download bandwidth because the SDK download call was executed as a callback. Thus, even though files were dequeued sequentially, one at a time, the callbacks could end up executing simultaneously on the background thread.
 
 Hence, to solve this, I implemented a mutex so that only one file could be downloading at any given time. This guaranteed that even if multiple callbacks were triggered, only one file could download at once--hence ensuring sufficient download bandwidth.
 
@@ -423,7 +432,7 @@ After troubleshooting the photo downloading issue described above, I had 1.5 day
 * Playback of historical images 
 * Responsive on mobile 
 
-### Architecture
+### Architecture Design
 [//]: # diagram 
 [left to right] 
 SCP sharing folder
