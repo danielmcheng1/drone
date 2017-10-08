@@ -425,18 +425,24 @@ mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExt
 // TBD: insert screenshot of app here 
 
 ## 4. Flask Web Service
-After troubleshooting the photo downloading issue described above, I had 1.5 days remaining to build the front-end web service in Flask. Given the tight timeline, I again winnowed down to the following  minimum criteria for completion. Note that this lists excludes automatic parsing / counting of cars within the images--as discussed before, this was a useful but not necessary feature of my envisioned service, and hence I chose to drop this so that I could deliver on the below essential features. 
+After troubleshooting the photo download issue described above, I had just over a day left to build the front-end web service for displaying the drone images. Given the tight timeline, I identified the following  minimum criteria for completion. You'll notice that this lists excludes automatic counting of cars within the images: As I mentioned before, this was a useful but not necessary feature of my envisioned service, and hence I chose to drop this so that I could deliver on the most crucial features.
 * Automatic refresh of latest images from drone 
 * Fast historical image browsing 
-* Playback of historical images 
-* Responsive on mobile 
+* Responsive on web and mobile 
 
 ### Architecture Design
+From a technical perspective, I broke down my remaining work into the following categories:
+1. __Image Processing__: Stitch and stack photos 
+2. __Flask Server__: Find latest images and display on site
+3. __Front-End UI__: Optimize for both web and mobile 
+
+The below diagram shows how these components fit into the higher-level architecture:
 [//]: # diagram 
 [left to right] 
 SCP sharing folder
-Images with final stitched/cleaned photos
-Merge to find differences 
+Query latest images 
+    Images with final stitched/cleaned photos
+    Merge to find differences 
 -->hugin executor 
 -->CV2 image reiszing/rotation 
 -->Flask server / Jinja generates  template -->hosting on EC2 
@@ -445,20 +451,14 @@ front end client views this
 -->Javascript front end for animation, browsing, and refreshing 
 loops back to front 
 
-### Find the Latest Images  
-[//]: # (tree snapshot)
-During mission execution, images are automatically saved into timestamped folders by mission ID. These raw images are pushed from Android local storage to the SCP share location.
+### 4.1 Image Processing 
+For certain missions, the drone takes a series of timed shots--hence these photos need to be stacked and "stitched" together to construct the final blended photo (similar to a panorama).
 
-The final processed images for displaying on the web are placed in an identical folder structure. Hence to determine new mission executions since the last refrehs, I simply compare the two folder structures and process any folder names that are in the SCP share location but not in the static/images location. 
+For this task, I selected Hugin, an open source photo processing package, because it fulfilled the two minimum requirements for stitching:
+1. __Input Flexibility__: Any number of images could be correctly blended into one final image 
+2. ___Automation__: All stitching could be automated in a command line script
 
-### Image Processing 
-For certain missions, the drone takes a series of timed shots--hence these photos need to be stitched together to construct the final blended photo. 
-
-I selected Hugin, an open source photo processing package, because it fulfilled the two minimum requirements for stitching:
-1. Any number of images could be correctly blended into one final image 
-2. The stitching process could be automated as a script
-
-Hugin offers Hugin Executor, a command line utility for stitching, aligning, and processing photos. Stitching is achieved by calling various other photo processing packages, such as nona, enblend, and cpfind. These implement algorithms like Dijkstra's two point alignment and [...].
+Regarding the second point, Hugin offers Hugin Executor, a command line utility for stitching, aligning, and processing photos. Stitching is achieved by calling various other photo processing packages, such as nona, enblend, and cpfind. These implement algorithms like Dijkstra's two point alignment and [...].
 
 The one unforeseen problem with Hugin Executor was its requirements for high CPU usage, which exceeded the capacity of the EC2 I used for hosting. One solution was to simply upgrade the EC2, but I chose instead to write a simple script to cap CPU usage by Hugin and all its derivative processors. Even a larger box, I would need some way to guarantee that Hugin did not consume too much compute power; hence limiting CPU was the simplest and fastest solution towards a viable product.
 
@@ -474,41 +474,57 @@ disown
 Finally, I utilized the Python CV2 library for final image clean-up, including compressing and converting Hugin output tif to jpeg images.
 
 ### Flask Hosting
-Because I architected my SCP sharing site and image hosting folder with a mission ID-date-timestamp hierarchy, it was simple to iterate over each processed mission folder and generate an HTML template where users could:
-1. Scroll down the page and views pictures grouped by day 
-2. Browse within a day and views pictures sorted by timestamp 
+#### Find the Latest Images  
+Having solved the problem of cleaning and stacking photos, I now had to structure my backend image repository in such a way that the Flask server could:
+1. Quickly identify the latest new images 
+2. Automatically group and sort photos by date and time for iterating inside of Flask templates
 
-Using the Jinja engine, I dynamically generated the HTML template for displaying all images. 
+To achieve the first requirement, I nested images within a mission-date-time hierarchy. I first pushed images from Android local storage to the SCP share location, saving them within this mission-date-time folder hierarchy. I then set up an identical nested structure in the Flask server images subfolder. To determine new mission executions since the last refresh, I simply merged the two folder listings and processed any folder names appearing in the SCP share location but not in the Flask images location. 
+
+<img src="writeup_images/imagetree.png" width="65%" alt="Organizational structure for images"/>
+
+To achieve the second requirements, I determined the following one-to-one correspondence between folder level and Flask object.
+* Mission folder --> One webpage of photos 
+* Date folder --> Section within a webpage 
+* Time folder --> Images in a slideshow within the same section 
+
+Because of this hierarchy, it was simple to iterate within a Flask template and generate this front-end functionality for users:
+1. Toggle between photos for each mission 
+2. Scroll down a mission page and view pictures grouped by day 
+3. Browse within a day and view pictures sorted by timestamp 
+
+<img src="writeup_images/websitestructure.png" width="65%" alt="Website structure"/>
 
 ### Front End 
-To display the mission images in a clean user-friendly front-end interface, I utilized bootstrap for basic styling. This also ensured responsiveness across devices. 
+To display the mission images in a clean user-friendly interface, I utilized bootstrap for basic styling. This also ensured responsiveness across web and movile. 
 
 I then coded Javascript functions so that users could:
 1. Click and zoom in on images (pinch and zoom on mobile) 
 2. Click to browse pictures sorted by timestamp within a given day 
-3. Click to animate the photos (essentially showing a gif for a given day) 
+3. Click to animate the photos (essentially showing a gif within a given day) 
 
-Finally, because Flask does not enable auto refreshing of a page from the back-end server, I implemented a Javascript callback to trigger a refresh every 60 seconds. While not ideal, this solution sufficed for this prototype. Future iterations can implement a method to refresh immediately when a new image is found.
+Finally, because Flask does not enable auto refreshing of a page from the back-end server, I implemented a Javascript callback to trigger a refresh every 60 seconds. While not ideal, this solution sufficed for this prototype. Future iterations can implement a method to selectively refresh the latest new image rather than running a full page refresh. 
 
 ## 5. Conclusion
 ### Future Work 
-My next iteration of this drone service would add the following features: 
+My next iteration of this drone service would implement the following features from my backlog: 
 * Automatically parse and count cars in the drone images 
 * Send MMS of images from the latest executed mission 
-* Set up subscription service for requesting drone to fly mission right now 
+* Set up a members subscription service for requesting drone to fly mission right now 
 
 Should this prove successful, I would then scale this up: 
-* Prototype software to coordinate and schedule  multiple drones flying throughout the day 
-* Minimize downtime for battery recharging
+* Identify other points of interest for taking photos 
+* Prototype software to coordinate and schedule multiple drones flying throughout the day 
+* Solve hardware constraints e.g. recharging/swapping batteries
 
-This is currently the difficulty with almost all consumer drones: A single battery can last for approximately 25 minutes of flight. Hence to fly missions over the span of several hours requires human intervention to swap and recharge batteries. 
+The last point speaks to the difficulty with almost all consumer drones: A single battery can last for approximately 25 minutes of flight. Hence to fly missions over the span of several hours requires human intervention to swap and recharge batteries. 
 
 Several commercial products have been developed to address this need:
 * __Skysense__: Wireless charging (drone charges upon landing on pad--no manual battery swap needed) 
 * __Dronebox__: Solar-powered autonomous charging stations
 * __Airobotics__: Robotic arm automatically swaps batteries and payloads in and out
 
-I would explore these products in more depth to determine compatibilitiy with current drone setup (as they may not work with DJi drones), and to evaluate cost tradeoffs (e.g. robotic battery swapping machine may cost far more than simply having a worker manually swap batteries for my service). 
+I would explore each of these products in more depth to determine compatibilitiy with my current software setup and DJI hardware, before evaluating cost tradeoffs (e.g. robotic battery swapping machine may cost far more than simply having a worker manually swap batteries for my service). 
 
 ### Final Takeaways
 SEE NOTES 
