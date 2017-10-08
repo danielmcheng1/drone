@@ -452,15 +452,15 @@ front end client views this
 loops back to front 
 
 ### 4.1 Image Processing 
-For certain missions, the drone takes a series of timed shots--hence these photos need to be stacked and "stitched" together to construct the final blended photo (similar to a panorama).
+For certain missions (e.g. taking photos of parking along a long narrow street), the drone takes a series of timed shots, in expectation that  these photos will be stacked and "stitched" together to construct a final blended photo of the street (similar to a panorama).
 
 For this task, I selected Hugin, an open source photo processing package, because it fulfilled the two minimum requirements for stitching:
 1. __Input Flexibility__: Any number of images could be correctly blended into one final image 
 2. ___Automation__: All stitching could be automated in a command line script
 
-Regarding the second point, Hugin offers Hugin Executor, a command line utility for stitching, aligning, and processing photos. Stitching is achieved by calling various other photo processing packages, such as nona, enblend, and cpfind. These implement algorithms like Dijkstra's two point alignment and [...].
+Regarding the second point, Hugin offers Hugin Executor, a command line utility for stitching, aligning, and processing photos. Stitching is achieved by calling various other photo processing packages, such as nona, enblend, and cpfind that execute blending algorithms. 
 
-The one unforeseen problem with Hugin Executor was its requirements for high CPU usage, which exceeded the capacity of the EC2 I used for hosting. One solution was to simply upgrade the EC2, but I chose instead to write a simple script to cap CPU usage by Hugin and all its derivative processors. Even a larger box, I would need some way to guarantee that Hugin did not consume too much compute power; hence limiting CPU was the simplest and fastest solution towards a viable product.
+The one unforeseen problem with Hugin Executor was its requirements for high CPU usage, which exceeded the capacity of the EC2 I used for hosting. One solution was to simply upgrade the EC2, but I chose instead to write a simple script to cap CPU usage by Hugin and all its derivative processors. Even on a larger box, I would still need some way to guarantee that Hugin did not consume too much compute power; hence limiting CPU was the simplest and fastest solution towards a viable product.
 
 ```bash
 nohup cpulimit --exe=/usr/bin/hugin_executor --limit=75 &
@@ -471,10 +471,9 @@ disown
 [...]
 ```
 
-Finally, I utilized the Python CV2 library for final image clean-up, including compressing and converting Hugin output tif to jpeg images.
+Finally, post-stitching in Hugin, I used the Python CV2 library to clean up the images, including compressing and converting Hugin output tif to jpeg images.
 
-### Flask Hosting
-#### Find the Latest Images  
+### 4.2 Flask Hosting
 Having solved the problem of cleaning and stacking photos, I now had to structure my backend image repository in such a way that the Flask server could:
 1. Quickly identify the latest new images 
 2. Automatically group and sort photos by date and time for iterating inside of Flask templates
@@ -495,7 +494,7 @@ Because of this hierarchy, it was simple to iterate within a Flask template and 
 
 <img src="writeup_images/websitestructure.png" width="65%" alt="Website structure"/>
 
-### Front End 
+### 4.3 Front End 
 To display the mission images in a clean user-friendly interface, I utilized bootstrap for basic styling. This also ensured responsiveness across web and movile. 
 
 I then coded Javascript functions so that users could:
