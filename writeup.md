@@ -431,32 +431,22 @@ After troubleshooting the photo download issue described above, I had just over 
 * Responsive on web and mobile 
 
 ### Architecture Design
-From a technical perspective, I broke down my remaining work into the following categories:
+From a technical perspective, I broke down my remaining work into the following components:
 1. __Image Processing__: Stitch and stack photos 
 2. __Flask Server__: Find latest images and display on site
 3. __Front-End UI__: Optimize for both web and mobile 
 
-The below diagram shows how these components fit into the higher-level architecture:
-[//]: # diagram 
-[left to right] 
-SCP sharing folder
-Query latest images 
-    Images with final stitched/cleaned photos
-    Merge to find differences 
--->hugin executor 
--->CV2 image reiszing/rotation 
--->Flask server / Jinja generates  template -->hosting on EC2 
+I also sketched out the below architecture from my custom mobile app to the final front-end browser.
 
-front end client views this 
--->Javascript front end for animation, browsing, and refreshing 
-loops back to front 
+<img src="writeup_images/flaskarchitecture.png" width="80%" alt="Flask architecture"/>
+
 
 ### 4.1 Image Processing 
 For certain missions (e.g. taking photos of parking along a long narrow street), the drone takes a series of timed shots, in expectation that  these photos will be stacked and "stitched" together to construct a final blended photo of the street (similar to a panorama).
 
 For this task, I selected Hugin, an open source photo processing package, because it fulfilled the two minimum requirements for stitching:
 1. __Input Flexibility__: Any number of images could be correctly blended into one final image 
-2. ___Automation__: All stitching could be automated in a command line script
+2. __Automation__: All stitching could be automated in a command line script
 
 Regarding the second point, Hugin offers Hugin Executor, a command line utility for stitching, aligning, and processing photos. Stitching is achieved by calling various other photo processing packages, such as nona, enblend, and cpfind that execute blending algorithms. 
 
@@ -471,7 +461,7 @@ disown
 [...]
 ```
 
-Finally, post-stitching in Hugin, I used the Python CV2 library to clean up the images, including compressing and converting Hugin output tif to jpeg images.
+Finally, post-stitching in Hugin, I used the Python Open CV library to clean up the images, including compressing and converting Hugin output tif to jpeg images.
 
 ### 4.2 Flask Hosting
 Having solved the problem of cleaning and stacking photos, I now had to structure my backend image repository in such a way that the Flask server could:
@@ -480,9 +470,9 @@ Having solved the problem of cleaning and stacking photos, I now had to structur
 
 To achieve the first requirement, I nested images within a mission-date-time hierarchy. I first pushed images from Android local storage to the SCP share location, saving them within this mission-date-time folder hierarchy. I then set up an identical nested structure in the Flask server images subfolder. To determine new mission executions since the last refresh, I simply merged the two folder listings and processed any folder names appearing in the SCP share location but not in the Flask images location. 
 
-<img src="writeup_images/imagetree.png" width="65%" alt="Organizational structure for images"/>
+<img src="writeup_images/imagetree.png" width="25%" alt="Organizational structure for images"/>
 
-To achieve the second requirements, I determined the following one-to-one correspondence between folder level and Flask object.
+To achieve the second requirement, I determined the following one-to-one correspondence between folder level and Flask object.
 * Mission folder --> One webpage of photos 
 * Date folder --> Section within a webpage 
 * Time folder --> Images in a slideshow within the same section 
@@ -492,7 +482,7 @@ Because of this hierarchy, it was simple to iterate within a Flask template and 
 2. Scroll down a mission page and view pictures grouped by day 
 3. Browse within a day and view pictures sorted by timestamp 
 
-<img src="writeup_images/websitestructure.png" width="65%" alt="Website structure"/>
+<img src="writeup_images/websitestructure.png" width="100%" alt="Website structure"/>
 
 ### 4.3 Front End 
 To display the mission images in a clean user-friendly interface, I utilized bootstrap for basic styling. This also ensured responsiveness across web and movile. 
