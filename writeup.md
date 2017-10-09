@@ -17,7 +17,7 @@ This writeup documents the software development process for [numerate.io](http:/
 4. [Flask Web Service](#4-Flask-Web-Service)
 5. [Conclusions](#5-COnclusions)
 
-## Overview of Software Components 
+## Project Architecture
 <img src="writeup_images/overallarchitecture.svg" width="80%" alt="Diagram of overall project architecture"/>
 
 ## 1. Project Planning 
@@ -522,4 +522,3 @@ You always try to find a prebuilt solution—like all these apps—instead of buildi
 Agile Development:  Planning a project of unknown complexity, adjusting as unexpected obstacles come  up
 Minimum Viable Product: Quickly picking up and learning whatever techniques are necessary for MVP 
 Production Systems: Having your component communicate with each API/service--and making it work with your product so YOUR integration is reliable and failsafe despite any issues with the other APIs/systems
-
