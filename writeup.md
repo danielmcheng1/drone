@@ -2,20 +2,18 @@
 _Author: Daniel Cheng_<br>
 _Date: 9/2/17 to 9/17/17_
 
-This writeup documents the software development process for [numerate.io](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos), an automated drone photo service that I built over the course of two weeks. The below analysis details three crucial skills for software project builds: 
-* __Project Planning__: Defining user requirements, adjusting timeline as challenges arise, completing MVP
-* __Technical Challenges__: Evaluating data structures, learning new tools, solving fundamental CS issues (e.g. multithreading)
-* __Software Architecture__: Interfacing with existing APIs, coordinating software components to meet user requirements
+This writeup documents the software development process for [numerate.io](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos), an automated drone photo service that I built over the course of two weeks. The below analysis highlights three important skills in  building software: 
+* __Project Planning__: Define user requirements, pivot as unexpected challenges arise, and complete minimum viable product
+* __Technical Skills__: Identify the right data structures, learn new platforms, and solve fundamental CS problems (e.g. multithreading)
+* __Software Architecture__: Define contract for each component, interface with existing APIs, then unify into final product
 
-[//]: # (include embedded page/screenshot) 
-[//]: # (link for dji developer with same issue, other download documentation links)
 
 ## Document Outline
 1. [Project Planning](#1-Project-Planning)
 2. [Evaluation of Existing Tools](#2-Evaluation-of-Existing-Tools)
 3. [Android App Development](#3-Android-App-Development)
 4. [Flask Web Service](#4-Flask-Web-Service)
-5. [Conclusions](#5-COnclusions)
+5. [Conclusion](#5-Conclusion)
 
 ## Project Architecture
 <img src="writeup_images/overallarchitecture.svg" width="80%" alt="Diagram of overall project architecture"/>
@@ -495,7 +493,7 @@ Finally, because Flask does not enable auto refreshing of a page from the back-e
 
 ## 5. Conclusion
 ### Future Work 
-My next iteration of this drone service would implement the following features from my backlog: 
+For the beta iteration of this drone service, I would implement the following features from my backlog: 
 * Automatically parse and count cars in the drone images 
 * Send MMS of images from the latest executed mission 
 * Set up a members subscription service for requesting drone to fly mission right now 
@@ -515,10 +513,16 @@ Several commercial products have been developed to address this need:
 I would explore each of these products in more depth to determine compatibilitiy with my current software setup and DJI hardware, before evaluating cost tradeoffs (e.g. robotic battery swapping machine may cost far more than simply having a worker manually swap batteries for my service). 
 
 ### Final Takeaways
-SEE NOTES 
-BREAKDOWN PROBLEM—e.g. API make it as explicit as possible and small as possible so that you make the MVP
-Make sure you scope as much of the problem so you know if feasible before investing more time
-You always try to find a prebuilt solution—like all these apps—instead of building your own. Much faster and smarter and safer
-Agile Development:  Planning a project of unknown complexity, adjusting as unexpected obstacles come  up
-Minimum Viable Product: Quickly picking up and learning whatever techniques are necessary for MVP 
-Production Systems: Having your component communicate with each API/service--and making it work with your product so YOUR integration is reliable and failsafe despite any issues with the other APIs/systems
+Looking back at my work over this two week sprint, I learned three key lessons in building a software service:
+
+1. __Define Project Scope__: It is tempting to build as many features as possible, and equally tempting to keep optimizing that final 10%. Because of my limited timeframe, I learned to focus mercilessly on the minimum requirements for my product. As an engineer, you simply cannot build every feature--and trying to do so will result in nothing being built. 
+
+2. __Use Existing APIs__: When building new features, check for existing solutions before building your own custom product. Existing APIs (the good ones) are often better tested, refactored, and documented; so using them will save you significant time. This is why I spent effort upfront to evaluate whether an existing mobile app could meet all my requirements. In the end, I had to build a custom solution--but it was still the right approach to find existing APIs before building my own app.
+  
+3. __Maintain Robustness__: Even if the root cause is due to poor implementation in another platform or API, your production system must be robust in handling exceptions and unexpected inputs. I ran into numerous bugs with the DJI mobile SDK, but I had to quickly pivot to find my own workaround. Even the best software platforms may have unexpected bugs, but it is your job to make all components work for your software service. 
+
+<img src="writeup_images/mavicpro1.png" width="50%" alt="Mavic Pro"/>
+
+[//]: # (reliable failsafe) 
+[//]: # (include embedded page/screenshot at beginning) 
+[//]: # (link for dji developer with same issue, other download documentation links)
