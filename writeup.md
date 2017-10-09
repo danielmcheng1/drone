@@ -24,12 +24,12 @@ Drone adoption has rapidly grown over the last few years, from search-and-rescue
 
 This project prototypes a new application of drones as photo subscription service. The offered service falls into two categories of high-level user stories. 
 
-__Request a photo now__<br> 
+__#1: Request a photo now__<br> 
 * As a city worker, I want to know how many street parking spots areo open so that I can park in the closest spot to my office
 * As a commuter, I want to now how long the line is at my local carpooling stop so that I can decide whether to leave now 
-* As a young working professional, I want to know how long the line is at my favorite restaurant so that I can avoid standing in a long line 
+* As a young working professional, I want to know how long the line is at my favorite restaurant so that I can avoid waiting
 
-__Analyzing historical images__<br>
+__#2: Analyze historical images__<br>
 * As a city engineer, I want to know the daily usage of parking spots so that I can analyze the effect of increasing or decreasing free parking spots 
 * As a marketer, I want to understand the demographic distribution of shoppers at IKEA so that I can design more targeted advertisements
 [//]: # ( * As a real estate investor, I want to survey properties so that I can evaluate the value of my potential investment)
@@ -73,12 +73,12 @@ Among the DJI drones, I selected the Mavic Pro because of its popularity in taki
 
 _Note_: For those unfamiliar with drones, you control the drone aircraft (left image) using a remote controller (right image), which transmits commands at 2.4 to 2.483 GHz. You then connect your phone to the remote controller, allowing you to not only issue commands directly from an app, but to also view a live camera feed of the drone's point of view.
 
-### Downloading Photos
+### Photo Download
 For the first two days, I experimented with the basics of flying a drone and taking photos. I first confirmed that the image quality was more than sufficient for my photo service (the photos came out as 12000 MP, a resolution far higher than most web browsers need for rendering). Secondly, I tested flying simple automated flights ("missions").
 
 During this phase, I ran into a roadblock with displaying the drone image in real-time on a website. When a photo is captured, the drone only stores the images on the SD card loaded on the physicial aircraft. However, I needed to download those photos from the aircraft to my mobile device--so that I could then immediately push those photos to my web server. Otherwise, the images would remain stuck on the aircraft until it landed. Furthermore, this image download had to occur programmatically, so that scheduled and triggered flights could push images automatically without any human intervention.
 
-Hence, to deliver on this feature, I sought out a DJI mobile app that could reliably download all images captured during a flight to local phone storage. Photos could then be pushed (using an app like [BotSync] (https://play.google.com/store/apps/details?id=com.botsync)) to the EC2 hosting my web server. 
+Hence, to deliver on this feature, I sought out a DJI mobile app that could reliably download all images captured during a flight to local phone storage. Photos could then be pushed (using an app like [BotSync](https://play.google.com/store/apps/details?id=com.botsync)) to the EC2 hosting my web server. 
 
 Should this prove impossible, I had a backup plan to install an Eyefi card on the aircraft--so that at the very least, images could automatically transmit once the drone landed in the wifi area. This would incur a slight delay in streaming to the website, but this would still allow for fully automated upload of images without human intervention.
  
@@ -190,7 +190,7 @@ Pix4D was a close second since it automatically downloaded images to the phone u
 
 Finally, none of the apps offered a way to schedule or trigger a mission (through a medium like SMS). Ultimately, you would still have to manually press a button to start the mission.
 
-__***Hence, I now had to rapidly pivot from my original development plan and build my own Android app to fulfill the project requirements.***__ 
+__***I now had to rapidly pivot from my original development plan and build my own Android app to fulfill the project requirements.***__ 
 
 ## 3. Android App Development
 ### Minimum Requirements
@@ -208,7 +208,7 @@ _Adding New Features_<br>
 * __Photo Compression__: Reduce photo size from 5 MB to 0.5 MB to speed up transfer
 
 
-### Problem Scoping: Evaluating the Mobile SDK
+### Problem Scope: Evaluating the Mobile SDK
 Before jumping into coding all of these functions, I first identified how each requirement mapped to an existing class or method in the [DJI mobile SDK](https://developer.dji.com/mobile-sdk/documentation/introduction/index.html). For any software engineering project, it is a best practice to evaluate the feasibility of each component beforehand--instead of discovering halfway through the project that the most crucial part is not possible. 
 
 Feature | DJI SDK Class | DJI SDK Method
@@ -253,17 +253,15 @@ I chose Android as the development platform for two reasons:
 
 As I had no direct Android app development experience--and given the limited timeframe for project completion--I copied the existing codebase from DJI's [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) and [camera tutorial](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time setting up product registration, drone connectivity, and live-camera streaming, I simply enhanced the existing tutorial to address my needs.
 
-Below is a breakdown of which app features were successfully completed by project day:<br>
-__Day 7__:
+Below is a breakdown of which app features were successfully completed by project day:
+<br><br>__Day 7__:
 <br>[x] Compile and run tutorials 
 <br>[x] Set up live video stream 
-<br>[x] Create button to take a photo during drone flight
-<br>[x] Troubleshoot Android permissions (requested at runtime instead of on install for >= Marshmallow)
+<br>[x] Create button to take one photo during drone flight
 
-__Day 8__:  
+__Day 8__:
 <br>[x] Set optimal focus for photos
-<br>[x] Automatically take off
-<br>[x] Automatically land 
+<br>[x] Automatically take off and land
 <br>[x] Download photos to internal storage 
 
 __Day 9__:
@@ -279,7 +277,6 @@ __Day 10__:
 __Day 11__:
 <br>[x] Resize images from 5 MB to 0.2 MB 
 <br>[x] Post resized images to EC2 server backend 
-<br>[x] Save photos in timestamped mission folder (locally and on server)
 <br>[x] Test complete execution of mission 
 
 __Days 12 - 14__: 
@@ -288,7 +285,7 @@ __Days 12 - 14__:
 As evident in the above timeline, I completed the app prototype within the expected timeframe of five days, but I ran into an unexpected technical challenge with downloading photos that required several additional days to troubleshoot. 
 
 
-### Technical Challenges: Multithreading and Synchronization for Photo Downloads
+### Technical Challenges: Multithreading and Synchronization
 #### Debugging the Problem 
 During my first code iteration, I used callbacks to automatically triggered photo download to local phone storage. That is, whenever the DJI camera app generated a new photo, it would automatically start downloading the photo:
 ```java 
