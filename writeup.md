@@ -289,7 +289,7 @@ As evident in the above timeline, I completed the app prototype within the expec
 
 
 ### Technical Challenges: Multithreading and Synchronization for Photo Downloads
-#### Debugging: Hypotheses 
+#### Debugging the Problem 
 During my first code iteration, I used callbacks to automatically triggered photo download to local phone storage. That is, whenever the DJI camera app generated a new photo, it would automatically start downloading the photo:
 ```java 
 camera.setMediaFileCallback(new MediaFile.Callback() {
@@ -316,12 +316,15 @@ I had two hypotheses for debugging this failure to download all photos:
 * __Transmission Distance__: Failure due to increased distance between controller and drone whenflying outdoors
 * __Limited Bandwidth__: Failure due to limited CPU or bandwidth for downloading photos
 
+_Hypothesis #1: Transmission Distance_<br>
 To test the first hypothesis, I replaced the individual callbacks with a batch download of all images after the mission completed (hence the drone had returned to within a few feet of the controller). Yet despite this adjustment, I still ran into similar download issues.
 
+_Hypothesis #2: Limited Bandwidth_<br>
 Hence, I moved onto the second hypothesis. When photo downloading failed, the logs from the download listener indicated that "the resource was too busy executing other commands." This indicated the following: Because photos were automatically downloading off of a callback--and because images were being shot every two seconds--all available bandwidth was consumed by the first 5 or 6 images, thus starving any new requests for downloading.
 
 I further validated this hypothesis based off similar problems encountered by a developer in the [DJI forum](http://forum.dev.dji.com). Furthermore, the DJI SDK offered a [task scheduler class](https://developer.dji.com/api-reference/android-api/Components/Camera/DJIMediaManager_FetchMediaTaskScheduler.html?) for fetching _previews_ of images--effectively implementing a queue to manage downloads one at a time. This again suggested that the _full resolution_ photos had to be downloaded one at a time due to limited transmission bandwidth.
 
+_Failure in Stress Tests_<br>
 The astute reader might question why this error happened only when flying outside--and not when flying virtually on the simulator. While testing the first hypothesis, I already validated that the _distance_ from controller to aircraft did not affect the download success rate. This indicated to me that a second issue might be at play.
 
 When building software projects, one typically executes tests in one of the three classes:
@@ -419,7 +422,6 @@ mediaFile.fetchFileData(new File(mDownloadPath + "/" + subfolder), filenameNoExt
 * Waypoint mission flying
 * Live video feed
 
-// TBD: insert screenshot of app here 
 
 ## 4. Flask Web Service
 After troubleshooting the photo download issue described above, I had just over a day left to build the front-end web service for displaying the drone images. Given the tight timeline, I identified the following  minimum criteria for completion. You'll notice that this lists excludes automatic counting of cars within the images: As I mentioned before, this was a useful but not necessary feature of my envisioned service, and hence I chose to drop this so that I could deliver on the most crucial features.
@@ -433,8 +435,9 @@ From a technical perspective, I broke down my remaining work into the following 
 2. __Flask Server__: Find latest images and display on site
 3. __Front-End UI__: Optimize for both web and mobile 
 
-I also sketched out the below architecture from my custom mobile app to the final front-end browser.
+I also sketched out the below architecture from my custom mobile app to the front-end browser.
 
+#### Flow of Images After Downloading from Drone
 <img src="writeup_images/flaskarchitecture.svg" width="80%" alt="Diagram of Flask Architecture"/>
 
 
@@ -523,6 +526,8 @@ Looking back at my work over this two week sprint, I learned three key lessons i
 
 <img src="writeup_images/mavicpro1.png" width="50%" alt="Mavic Pro"/>
 
+
+[//]: # (insert screenshot of app) 
 [//]: # (reliable failsafe) 
 [//]: # (include embedded page/screenshot at beginning) 
 [//]: # (link for dji developer with same issue, other download documentation links)
