@@ -18,8 +18,7 @@ This writeup documents the software development process for [numerate.io](http:/
 5. [Conclusions](#5-COnclusions)
 
 ## Overview of Software Components 
-![Diagram of project architecture](writeup_images/drawio_architecture.JPG)
-
+<img src="writeup_images/overallarchitecture.svg" width="80%" alt="Diagram of overall project architecture"/>
 
 ## 1. Project Planning 
 ### Raison D'Etre
@@ -141,7 +140,7 @@ Users can create far more customized and automated missions than would be possib
 
 Users simply tap on the map to create a waypoint, then add any of the above actions to that waypoint. A series of such waypoints are then uploaded as a mission to the drone. All that's left is to hit "Run Mission" and the app will fly the drone from start to finish!
 
-<img src="writeup_images/litchi_missionscreen.JPG" width="60%" alt="Litchi Mission"/>
+<img src="writeup_images/litchi_missionscreen.jpg" width="60%" alt="Litchi Mission"/>
 
 Hence, DJI Ultimate Flight and Litchi fulfill criteria #2 (automated mission with photos). However, these apps fail to meet criteria #1 (download pictures automatically). Litchi does offer photo caching on iOS, but this feature is not avialable during waypoint missions.
 
@@ -438,7 +437,7 @@ From a technical perspective, I broke down my remaining work into the following 
 
 I also sketched out the below architecture from my custom mobile app to the final front-end browser.
 
-<img src="writeup_images/flaskarchitecture.png" width="80%" alt="Flask architecture"/>
+<img src="writeup_images/flaskarchitecture.svg" width="80%" alt="Diagram of Flask Architecture"/>
 
 
 ### 4.1 Image Processing 
@@ -461,7 +460,7 @@ disown
 [...]
 ```
 
-Finally, post-stitching in Hugin, I used the Python Open CV library to clean up the images, including compressing and converting Hugin output tif to jpeg images.
+Finally, post-stitching in Hugin, I used the Python OpenCV library to clean up the images, including compressing and converting Hugin output tif to jpeg images.
 
 ### 4.2 Flask Hosting
 Having solved the problem of cleaning and stacking photos, I now had to structure my backend image repository in such a way that the Flask server could:
