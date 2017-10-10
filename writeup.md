@@ -16,13 +16,31 @@ This writeup documents the software development process for [numerate.io](http:/
 
 ## Document Outline
 1. [Project Planning](#1-Project-Planning)
+   1. [Raison D'Etre](#1-1-Raison-D-Etre)
+   2. [Requirements](#1-2-Requirements)
+   3. [Initial Timeline](#1-3-Initial-Timeline)
+   4. [Anticipated Roadblocks](#1-4-Anticipated-Roadblocks)
 2. [Evaluation of Existing Tools](#2-Evaluation-of-Existing-Tools)
+   1. [Hardware Justification](#2-1-Hardware-Justification)
+   2. [First Roadblock: Automated Photo Downloads](#2-2-First-Roadblock-with-Automated-Photo-Downloads)
+   3. [Comparison of Drone Apps](#2-3-Comparison-of-Drone-Apps)
 3. [Android App Development](#3-Android-App-Development)
+   1. [Requirements](#3-1-Requirements)
+   2. [Problem Scope](#3-2-Problem-Scope)
+   3. [Revised Timeline](#3-3-Revised-Timeline)
+   4. [Software Build](#3-4-Software-Build)
+   5. [Technical Challenges: Multlithreading and Synchronization](#3-5-Technical-Challenges-with-Multithreading-and-Synchronization)
 4. [Flask Web Service](#4-Flask-Web-Service)
+   1. [Architecture](#4-1-Architecture)
+   2. [Image Processing](#4-2-Image-Processing)
+   3. [Flask Hosting](#4-3-Flask-Hosting) 
+   4. [Front End](#4-4-Front-End)
 5. [Conclusion](#5-Conclusion)
-
+   1. [Future Work](#5-1-Future-Work)
+   2. [Final Takeaways](#5-2-Final-Takeaways) 
+   
 ## Project Architecture
-<img src="writeup_images/overallarchitecture.jpg" width="100%" alt="Diagram of overall project architecture"/>
+<img src="writeup_images/overallarchitecture.jpg" width="80%" alt="Diagram of overall project architecture"/>
 
 ## 1. Project Planning 
 ### 1.1 Raison D'Etre
@@ -69,7 +87,7 @@ If by Day 5 in my timeline, I indeed could not find an existing product for sche
 2. Plan for having a manual release of the drone by a human worker. No matter how automated, this drone service would likely need some human intervention to maintain
 
 ## 2. Evaluation of Existing Tools 
-### Hardware Justification
+### 2.1 Hardware Justification
 For this project, I chose to use a DJI drone for two reasons. First, DJI is the clear leader in the consumer drone space, owning perhaps [50% of the North American market](https://www.recode.net/2017/4/14/14690576/drone-market-share-growth-charts-dji-forecast). My project was focused on software rather than hardware--so I wanted to pick the most reliable hardware available, thus avoiding having to troubleshoot flight control or camera issues.
 
 Secondly, DJI offers [programmatic control](https://developer.dji.com/mobile-sdk/documentation/introduction/mobile_sdk_introduction.html) of its drones, opening up the possibility of advanced customized control over the drone's flight. 
@@ -82,7 +100,7 @@ Again, the focus of this project was on software and not on hardware--hence I wa
 
 _Note_: For those unfamiliar with drones, you control the drone aircraft (left image) using a remote controller (right image). You then connect your phone to the remote controller, allowing you to not only issue commands directly from an app, but to also view a live camera feed of the drone's point of view.
 
-### First Roadblock: Automated Photo Downloads
+### 2.2 First Roadblock with Automated Photo Downloads
 For the first two days, I experimented with the basics of flying a drone and taking photos. I first confirmed that the image quality was more than sufficient for my photo service (the photos came out as 12000 MP, a resolution far higher than most web browsers need for rendering). Secondly, I tested flying simple automated flights ("missions").
 
 During this phase, I ran into a roadblock with displaying the drone image in real-time on a website. When a photo was captured, the drone would store the images on the SD card loaded on the physical aircraft. However, I needed to trasnfer those photos from the SD card to my mobile device--so that I could then immediately push those photos to my web server (otherwise how could users request a photo for right now?). 
@@ -91,7 +109,7 @@ Hence, to deliver on this feature, I sought out a DJI mobile app that could reli
 
 Should this prove impossible, I had a backup plan to install an Eyefi card on the aircraft--so that at the very least, images could automatically transmit once the drone landed in the wifi area. This would incur a slight delay in streaming to the website, but would still allow for fully automated upload of images without human intervention.
  
-### Comparison of Drone Apps 
+### 2.3 Comparison of Drone Apps 
 Given my first two days of drone exploration, I now focused my efforts on finding an existing mobile app providing functionality to:
 1. Take photos while automatically flying a preset flight path (mission)
 2. Download photos to phone
@@ -202,7 +220,7 @@ Finally, none of the apps offered a way to schedule or trigger a mission (throug
 __***I now had to rapidly pivot from my original development plan and build my own Android app to fulfill the project requirements.***__ 
 
 ## 3. Android App Development
-### Requirements
+### 3.1 Requirements
 Given the limited timeframe, I needed to carefully identify the exact requirements for my custom app. I was _not_ designing a user-facing app like Litchi, with a complete UI, product validation, forms for custom missions, and so on. Rather, I only had to build the following list of features: 
 
 _Rebuilding Features Available in Existing Apps_<br>
@@ -217,7 +235,7 @@ _Adding New Features_<br>
 * __Photo Transfer__: Push downloaded photos to EC2 server
 
 
-### Problem Scope
+### 3.2 Problem Scope
 Before jumping into coding all of these functions, I first identified how each requirement mapped to an existing class or method in the [DJI mobile SDK](https://developer.dji.com/mobile-sdk/documentation/introduction/index.html). For any software engineering project, it is a best practice to evaluate the feasibility of each component beforehand--instead of discovering halfway through the project that the most crucial part is not possible. 
 
 _Rebuilding Features Available in Existing Apps_<br>
@@ -239,7 +257,7 @@ Photo Transfer| JSch
 
 During this phase, I reviewed the sample [DJI tutorials](https://developer.dji.com/mobile-sdk/documentation/introduction/index.html), then identified troubleshooting resources, such as the [DJI developer forum] (http://forum.dev.dji.com) and [DJI posts on Stack Overflow] (https://stackoverflow.com/questions/tagged/dji-sdk). I also contacted DJI support to validate the most essential feature for my app (i.e. that photos could be automatically downloaded during mission execution).
 
-### Revised Timeline 
+### 3.3 Revised Timeline
 Once I determined that the DJI mobile SDK could implement all of my required features, I adjusted my initial timeline to account for the effort required to write an Android application. 
 
 At this point, six days had elapsed already. Given that I had not worked with Android before, an initial prototype would take, at minimum, three days--and a would likely take closer to five or six days to iron out any bugs. Hence, to accommodate app development, I had to eliminate several features in my initial timeline, including:
@@ -259,14 +277,14 @@ Thus my revised timeline was as follows:
 
 ![Project Timeline](writeup_images/timeline2.png)
 
-### Software Build 
+### 3.4 Software Build 
 I chose Android as the development platform for two reasons:
 1. __Existing Hardware__: I had an Android phone readily available for installing and debugging 
 2. __Developer Control__: I valued Android having more flexibility than iOS (e.g. having more control to save photos in any folder of the file system, having the ability to publish app directly to the Marketplace)
 
 As I had no direct Android app development experience--and given the limited timeframe for project completion--I copied the existing codebase from DJI's [QuickStart Guide](https://developer.dji.com/mobile-sdk/documentation/quick-start/index.html) and [camera tutorial](https://developer.dji.com/mobile-sdk/documentation/android-tutorials/index.html). Rather than spending my limited time setting up product registration, drone connectivity, and live-camera streaming, I simply enhanced the existing tutorial to address my needs.
 
-Below is a breakdown of which app features were successfully completed by project day:
+Below is a breakdown of which app features were successfully completed each day:
 <br><br>__Day 7__:
 <br>[x] Compile and run tutorials 
 <br>[x] Set up live video stream 
@@ -298,7 +316,7 @@ __Days 12 - 14__:
 As evident in the above timeline, I completed the app prototype within the expected timeframe of five days, but I ran into an unexpected technical challenge with downloading photos that required several additional days to troubleshoot. 
 
 
-### Technical Challenges: Multithreading and Synchronization
+### 3.5 Technical Challenges with Multithreading and Synchronization
 #### Debugging the Problem 
 During my first code iteration, I used callbacks to automatically triggered photo download to local phone storage. That is, whenever the DJI camera app generated a new photo, it would automatically start downloading the photo:
 ```java 
@@ -438,7 +456,7 @@ From a technical perspective, I broke down my remaining work into the following 
 I also sketched out the below architecture from my custom mobile app to the front-end browser.
 
 #### Flow of Images After Downloading from Drone
-<img src="writeup_images/flaskarchitecture.jpg" width="80%" alt="Diagram of Flask Architecture"/>
+<img src="writeup_images/flaskarchitecture.png" width="70%" alt="Diagram of Flask Architecture"/>
 
 
 ### 4.2 Image Processing 
@@ -495,7 +513,7 @@ I then coded Javascript functions so that users could:
 Finally, because Flask does not enable auto refreshing of a page from the back-end server, I implemented a Javascript callback to trigger a refresh every 60 seconds. While not ideal, this solution sufficed for this prototype. Future iterations can implement a method to selectively refresh the latest new image rather than running a full page refresh. 
 
 ## 5. Conclusion
-### Future Work 
+### 5.1 Future Work 
 For the beta iteration of this drone service, I would implement the following features from my backlog: 
 * Automatically parse and count cars in the drone images 
 * Send MMS of images from the latest executed mission 
@@ -515,7 +533,7 @@ Several commercial products have been developed to address this need:
 
 I would explore each of these products in more depth to determine compatibilitiy with my current software setup and DJI hardware, before evaluating cost tradeoffs (e.g. robotic battery swapping machine may cost far more than simply having a worker manually swap batteries for my service). 
 
-### Final Takeaways
+### 5.2 Final Takeaways
 Looking back at my work over this two week sprint, I learned three key lessons in building a software service:
 
 1. __Define Project Scope__: It is tempting to build as many features as possible, and equally tempting to keep optimizing that final 10%. Because of my limited timeframe, I learned to focus mercilessly on the minimum requirements for my product. As an engineer, you simply cannot build every feature--and trying to do so will result in nothing being built. 
