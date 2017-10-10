@@ -29,7 +29,7 @@ This writeup documents the software development process for [numerate.io](http:/
    2. [Problem Scope](#32-problem-scope)
    3. [Revised Timeline](#33-revised-timeline)
    4. [Software Build](#34-software-build)
-   5. [Technical Challenges: Multlithreading and Synchronization](#35-technical-challenges-with-multithreading-and-synchronization)
+   5. [Technical Challenges: Multithreading and Synchronization](#35-technical-challenges-with-multithreading-and-synchronization)
 4. [Flask Web Service](#4-flask-web-service)
    1. [Architecture](#41-architecture)
    2. [Image Processing](#42-image-processing)
