@@ -166,7 +166,7 @@ Users can create far more customized and automated missions than would be possib
 
 Users simply tap on the map to create a waypoint, then add any of the above actions to that waypoint. A series of such waypoints are then uploaded as a mission to the drone. All that's left is to hit "Run Mission" and the app will fly the drone from start to finish!
 
-<img src="writeup_images/litchi_missionscreen.jpg" width="60%" alt="Litchi Mission"/>
+<img src="writeup_images/litchi_missionscreen.png" width="60%" alt="Litchi Mission"/>
 
 Hence, DJI Ultimate Flight and Litchi fulfill criteria #2 (automated mission with photos). However, these apps fail to meet criteria #1 (download pictures automatically). Litchi does offer photo caching on iOS, but this feature is not avialable during waypoint missions.
 
