@@ -29,15 +29,15 @@ This writeup documents the software development process for [numerate.io](http:/
    2. [Problem Scope](#32-problem-scope)
    3. [Revised Timeline](#33-revised-timeline)
    4. [Software Build](#34-software-build)
-   5. [Technical Challenges: Multlithreading and Synchronization](#3-5-technical-challenges-with-multithreading-and-synchronization)
+   5. [Technical Challenges: Multlithreading and Synchronization](#35-technical-challenges-with-multithreading-and-synchronization)
 4. [Flask Web Service](#4-flask-web-service)
    1. [Architecture](#41-architecture)
    2. [Image Processing](#42-image-processing)
    3. [Flask Hosting](#43-flask-hosting) 
    4. [Front End](#44-front-end)
 5. [Conclusion](#5-conclusion)
-   1. [Future Work](#5-1-future-work)
-   2. [Final Takeaways](#5-2-final-takeaways) 
+   1. [Future Work](#51-future-work)
+   2. [Final Takeaways](#52-final-takeaways) 
    
 ## Project Architecture
 <img src="writeup_images/overallarchitecture.jpg" width="80%" alt="Diagram of overall project architecture"/>
