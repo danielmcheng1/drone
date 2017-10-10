@@ -78,7 +78,7 @@ Among the DJI drones, I selected the Mavic Pro because of its popularity in taki
 
 Again, the focus of this project was on software and not on hardware--hence I wanted to select a drone that would automate as much of the piloting process as possible. 
 
-<img src="writeup_images/mavicpro1.png" width="50%" alt="Mavic Pro"/>
+<img src="writeup_images/mavicpro1.png" width="40%" alt="Mavic Pro"/>
 <img src="writeup_images/mavicprocontroller.png" width="40%" alt="Mavic Pro Remote Controller"/>
 <br>
 
