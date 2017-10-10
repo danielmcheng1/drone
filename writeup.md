@@ -1,4 +1,5 @@
 [//]: # (cut section 2 e.g half the apps)  
+[//]: # (random like developer control for android?)
 [//]: # (insert drone video)
 [//]: # (insert screenshot of app) 
 [//]: # (include embedded page/screenshot at beginning) 
