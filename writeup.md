@@ -22,7 +22,7 @@ This writeup documents the software development process for [numerate.io](http:/
 5. [Conclusion](#5-Conclusion)
 
 ## Project Architecture
-<img src="writeup_images/overallarchitecture.svg" width="100%" alt="Diagram of overall project architecture"/>
+<img src="writeup_images/overallarchitecture.jpg" width="100%" alt="Diagram of overall project architecture"/>
 
 ## 1. Project Planning 
 ### Raison D'Etre
@@ -78,9 +78,7 @@ Among the DJI drones, I selected the Mavic Pro because of its popularity in taki
 
 Again, the focus of this project was on software and not on hardware--hence I wanted to select a drone that would automate as much of the piloting process as possible. 
 
-<img src="writeup_images/mavicpro1.png" width="40%" alt="Mavic Pro"/>
-<img src="writeup_images/mavicprocontroller.png" width="40%" alt="Mavic Pro Remote Controller"/>
-<br>
+<img src="writeup_images/mavicprowithcontroller.png" width="80%" alt="Mavic Pro with Controller"/>
 
 _Note_: For those unfamiliar with drones, you control the drone aircraft (left image) using a remote controller (right image). You then connect your phone to the remote controller, allowing you to not only issue commands directly from an app, but to also view a live camera feed of the drone's point of view.
 
@@ -440,7 +438,7 @@ From a technical perspective, I broke down my remaining work into the following 
 I also sketched out the below architecture from my custom mobile app to the front-end browser.
 
 #### Flow of Images After Downloading from Drone
-<img src="writeup_images/flaskarchitecture.svg" width="80%" alt="Diagram of Flask Architecture"/>
+<img src="writeup_images/flaskarchitecture.jpg" width="80%" alt="Diagram of Flask Architecture"/>
 
 
 ### 4.1 Image Processing 
