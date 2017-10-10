@@ -41,7 +41,7 @@ This writeup documents the software development process for [numerate.io](http:/
    2. [Final Takeaways](#52-final-takeaways) 
    
 ## Project Architecture
-<img src="writeup_images/overallarchitecture.jpg" width="80%" alt="Diagram of overall project architecture"/>
+<img src="writeup_images/overallarchitecture.png" width="80%" alt="Diagram of overall project architecture"/>
 
 ## 1. Project Planning 
 ### 1.1 Raison D'Etre
