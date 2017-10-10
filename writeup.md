@@ -25,7 +25,7 @@ This writeup documents the software development process for [numerate.io](http:/
 <img src="writeup_images/overallarchitecture.jpg" width="100%" alt="Diagram of overall project architecture"/>
 
 ## 1. Project Planning 
-### Raison D'Etre
+### 1.1 Raison D'Etre
 Drone adoption has rapidly grown over the last few years, from search-and-rescue missions and aerial surveyance prior to excavation, to automated package delivery and photo shoots for personal enjoyment. 
 
 This project prototypes a drone photo subscription service. The offered service automates photo capture so that subscribers can easily count cars and people in real-time for any location of interest. 
@@ -36,30 +36,30 @@ Hence, through this service, subscribers can either:
 
 What are the user stories behind these two features?
 
-#1: Why would someone want to request a photo right now?
+__#1: Why would someone want to request a photo right now?__
 * As a city worker, I want to know how many street parking spots are open right now so that I can decide where to park 
 * As a commuter, I want to know how long the line is at my local carpooling stop so that I can decide whether to leave now 
 * As a working professional, I want to know how long the line is at my favorite restaurant so that I can avoid waiting
 
-#2: Why would someone want to analyze historical images?
+__#2: Why would someone want to analyze historical images?__
 * As a city engineer, I want to know daily parking occupancy so I increase or decrease parking meter rates 
 * As a marketer, I want to understand the demographic distribution of shoppers at IKEA so that I can design more targeted advertisements
 
 These are merely a sampling of potential applications. You can easily envision many other situations that would benefit from such a drone service.
 
-### Requirements
+### 1.2 Requirements
 Based on the above user stories, my minimum viable product must provide the following two features to users:
 1. Request a photo right now
 2. Browse current AND historical images for my location of interest 
 
-### Initial Timeline
+### 1.3 Initial Timeline
 To further breakdown the complexity of this project, I set the following timeline for completing each project component over the course of 16 days.
 
 ![Project Timeline](writeup_images/timeline1.png)
 
 _Note:_ All of this was planned as a prototype for purely recreational purposes. Further development into a commercial product would require consideration of FAA regulations around drone flight.
 
-### Anticipated Roadblocks 
+### 1.4 Anticipated Roadblocks 
 Having done initial research into consumer drone capabilities, I had found several mobile apps that could automate taking photos and flying predetermined routes (known as "missions"). Thus the work for days 1 through 4 seemed to merely be a matter of execution.
 
 However, I had found no examples of consumer apps allowing for scheduled or triggered missions. I suspected there were potential safety concerns--as well as less demand for this in the hobbyist market (i.e. unless you are flying drones commercially, it seems unlikely that you would need to have fully automated, scheduled drone flights). 
@@ -82,7 +82,7 @@ Again, the focus of this project was on software and not on hardware--hence I wa
 
 _Note_: For those unfamiliar with drones, you control the drone aircraft (left image) using a remote controller (right image). You then connect your phone to the remote controller, allowing you to not only issue commands directly from an app, but to also view a live camera feed of the drone's point of view.
 
-### Photo Download
+### First Roadblock: Automated Photo Downloads
 For the first two days, I experimented with the basics of flying a drone and taking photos. I first confirmed that the image quality was more than sufficient for my photo service (the photos came out as 12000 MP, a resolution far higher than most web browsers need for rendering). Secondly, I tested flying simple automated flights ("missions").
 
 During this phase, I ran into a roadblock with displaying the drone image in real-time on a website. When a photo was captured, the drone would store the images on the SD card loaded on the physical aircraft. However, I needed to trasnfer those photos from the SD card to my mobile device--so that I could then immediately push those photos to my web server (otherwise how could users request a photo for right now?). 
@@ -190,7 +190,7 @@ The [DroneDeploy](https://www.dronedeploy.com/app.html) app lands users on a dem
 
 Although DroneDeploy offered perhaps the best mapping features on the app market, I ran into similar issues with photo caching, in which the app automatically generated hundreds for photos for a mission, but required manual extraction of images from the SD card in order to process. 
 
-### Conclusion of Drone App Evaluation 
+#### Conclusion of Drone App Evaluation 
 After thoroughly testing all of these drone apps, I concluded that no existing app could fulfill the minimum criteria necessary for my drone service.
 
 Litchi came closest with its mission planning interface and automated flights, but failed to offer photo downloading during missions--essential for immediate streaming to my website. 
@@ -202,7 +202,7 @@ Finally, none of the apps offered a way to schedule or trigger a mission (throug
 __***I now had to rapidly pivot from my original development plan and build my own Android app to fulfill the project requirements.***__ 
 
 ## 3. Android App Development
-### Minimum Requirements
+### Requirements
 Given the limited timeframe, I needed to carefully identify the exact requirements for my custom app. I was _not_ designing a user-facing app like Litchi, with a complete UI, product validation, forms for custom missions, and so on. Rather, I only had to build the following list of features: 
 
 _Rebuilding Features Available in Existing Apps_<br>
@@ -217,7 +217,7 @@ _Adding New Features_<br>
 * __Photo Transfer__: Push downloaded photos to EC2 server
 
 
-### Problem Scope: Evaluating the Mobile SDK
+### Problem Scope
 Before jumping into coding all of these functions, I first identified how each requirement mapped to an existing class or method in the [DJI mobile SDK](https://developer.dji.com/mobile-sdk/documentation/introduction/index.html). For any software engineering project, it is a best practice to evaluate the feasibility of each component beforehand--instead of discovering halfway through the project that the most crucial part is not possible. 
 
 _Rebuilding Features Available in Existing Apps_<br>
@@ -429,7 +429,7 @@ After troubleshooting the photo download issue described above, I had just over 
 * Fast historical image browsing 
 * Responsive on web and mobile 
 
-### Architecture Design
+### 4.1 Architecture
 From a technical perspective, I broke down my remaining work into the following components:
 1. __Image Processing__: Stitch and stack photos 
 2. __Flask Server__: Find latest images and display on site
@@ -441,7 +441,7 @@ I also sketched out the below architecture from my custom mobile app to the fron
 <img src="writeup_images/flaskarchitecture.jpg" width="80%" alt="Diagram of Flask Architecture"/>
 
 
-### 4.1 Image Processing 
+### 4.2 Image Processing 
 For certain missions (e.g. taking photos of parking along a long narrow street), the drone takes a series of timed shots, in expectation that  these photos will be stacked and "stitched" together to construct a final blended photo of the street (similar to a panorama).
 
 For this task, I selected Hugin, an open source photo processing package, because it fulfilled the two minimum requirements for stitching:
@@ -463,7 +463,7 @@ disown
 
 Finally, post-stitching in Hugin, I used the Python OpenCV library to clean up the images, including compressing and converting Hugin output tif to jpeg images.
 
-### 4.2 Flask Hosting
+### 4.3 Flask Hosting
 Having solved the problem of cleaning and stacking photos, I now had to structure my backend image repository in such a way that the Flask server could:
 1. Quickly identify the latest new images 
 2. Automatically group and sort photos by date and time for iterating inside of Flask templates
@@ -484,7 +484,7 @@ Because of this hierarchy, it was simple to iterate within a Flask template and 
 
 <img src="writeup_images/websitestructure.png" width="100%" alt="Website structure"/>
 
-### 4.3 Front End 
+### 4.4 Front End 
 To display the mission images in a clean user-friendly interface, I utilized bootstrap for basic styling. This also ensured responsiveness across web and movile. 
 
 I then coded Javascript functions so that users could:
