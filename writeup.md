@@ -16,13 +16,13 @@ This writeup documents the software development process for [numerate.io](http:/
 
 ## Document Outline
 1. [Project Planning](#1-project-planning)
-   1. [Raison D'Etre](#11-raison-d-etre)
+   1. [Raison D'Etre](#11-raison-detre)
    2. [Requirements](#12-requirements)
    3. [Initial Timeline](#13-initial-timeline)
    4. [Anticipated Roadblocks](#14-anticipated-roadblocks)
 2. [Evaluation of Existing Tools](#2-evaluation-of-existing-tools)
    1. [Hardware Justification](#21-hardware-justification)
-   2. [First Roadblock: Automated Photo Downloads](#2-2-first-roadblock-with-automated-photo-downloads)
+   2. [First Roadblock: Automated Photo Downloads](#22-first-roadblock-with-automated-photo-downloads)
    3. [Comparison of Drone Apps](#23-comparison-of-drone-apps)
 3. [Android App Development](#3-android-app-development)
    1. [Requirements](#31-requirements)
