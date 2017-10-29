@@ -1,19 +1,13 @@
-[//]: # (cut section 2 e.g half the apps)  
-[//]: # (random like developer control for android?)
-[//]: # (insert drone video)
-[//]: # (insert screenshot of app) 
-[//]: # (include embedded page/screenshot at beginning) 
-[//]: # (link for dji developer with same issue, other download documentation links)
-
 # Drone Software Project
 _Author: Daniel Cheng_<br>
 _Date: 9/2/17 to 9/17/17_
 
-This writeup documents the software development process for [numerate.io](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos), an automated drone photo service that I built over the course of two weeks. The below analysis highlights three important skills in  building software: 
+This writeup documents the software development process for [numerate.io](https://goo.gl/3yVGLa), an automated drone photo service that I built over the course of two weeks. The below analysis highlights three important skills in building software: 
 * __Project Planning__: Define user requirements, pivot as unexpected challenges arise, and complete minimum viable product
 * __Technical Skills__: Identify the right data structures, learn new platforms, and solve fundamental CS problems (e.g. multithreading)
 * __Software Architecture__: Define contract for each component, interface with existing APIs, then unify into final product
 
+You can also view a video of the drone in action [here](https://goo.gl/4taYny).
 
 ## Document Outline
 1. [Project Planning](#1-project-planning)
